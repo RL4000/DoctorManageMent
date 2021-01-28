@@ -26,6 +26,7 @@ public class Doctor extends User implements Serializable{
 
     public Doctor(String userName, String password, UserRole userRole) {
         super(userName, password, userRole);
+
     }
 
     public Doctor(String userCode, String userName, String password, UserRole userRole) {
