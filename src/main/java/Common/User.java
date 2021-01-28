@@ -15,14 +15,14 @@ public class User {
     private String userCode; //not null, unique
     private String userName; //>=5 chars, must start with a letter
     private String password; //>=6 chars, include both letter & numbers, no other type of chars
-    private UserRole userRole; //0 = ADMIN, 1 = DOCTOR
+    private UserRole userRole; //0 = ADMIN, 1 = DOCTOR xxxxx
     
     public User() {
     }
 
     public User(String userCode, String userName, String password) {
         this.userCode = userCode;
-        this.userName = userName;
+        this.userName = userName;   
         this.password = password;
     }
 
