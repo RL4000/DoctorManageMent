@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Controllers;
+package Doctor;
 
-import Constants.UserRole;
-import Models.User;
+import Common.UserRole;
+import Common.User;
 
 /**
  *
  * @author Admin
  */
-public class UserController {
+public class DoctorView {
     
     public void something(){
         User u = new User();

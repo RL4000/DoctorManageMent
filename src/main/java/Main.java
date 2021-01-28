@@ -3,9 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Views;
 
-import Controllers.AppController;
 import java.util.Scanner;
 
 /**
@@ -14,8 +12,6 @@ import java.util.Scanner;
  */
 public class Main {
     public static void main(String[] args) {
-        AppController app= AppController.getInstance();
-        app.printMenu();
     }
     
 }
