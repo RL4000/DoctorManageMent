@@ -44,15 +44,7 @@ public class Main {
         //------------------ADD TAM DATA VAO FILE USERS.DAT DE TEST, XOA SAU
 
         loginMenu();
-        User user = userController.getLoggedInUser();
-
-        if (user != null) {
-            if (user.getUserRole() == UserRole.ADMIN) {
-                adminMenu();
-            } else if (user.getUserRole() == UserRole.AUTHORIZED_DOCTOR) {
-                doctorMenu();
-            }
-        }
+        mainMenu();
 
     }
 
@@ -114,6 +106,18 @@ public class Main {
             }
         }
     }
+    
+    private static void mainMenu(){
+        User user = userController.getLoggedInUser();
+
+        if (user != null) {
+            if (user.getUserRole() == UserRole.ADMIN) {
+                adminMenu();
+            } else if (user.getUserRole() == UserRole.AUTHORIZED_DOCTOR) {
+                doctorMenu();
+            }
+        }
+    }
 
     private static void adminMenu() {
         int choice = -1;
@@ -144,6 +148,7 @@ public class Main {
                     case 7:
                         userController.logout();
                         loginMenu();
+                        mainMenu();
                         return;
                     default:
                         break;
@@ -176,6 +181,7 @@ public class Main {
                     case 4:
                         userController.logout();
                         loginMenu();
+                        mainMenu();
                         return;
                     default:
                         break;
