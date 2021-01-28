@@ -7,15 +7,16 @@ package Doctor;
  */
 
 
-import Common.User;
-import org.jetbrains.annotations.Nullable;
+import Common.UserRole;
+import User.User;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author Admin
  */
-public class Doctor extends User{
+public class Doctor extends User implements Serializable{
     private int doctorId;
     private String specialization;
     private Date availability; //
@@ -23,12 +24,15 @@ public class Doctor extends User{
     public Doctor() {
     }
 
-    public Doctor(String userCode, String userName, String password, @Nullable int doctorId, String specialization, Date availability) {
-        super(userCode, userName, password);
-        this.doctorId = doctorId;
-        this.specialization = specialization;
-        this.availability = availability;
+    public Doctor(String userName, String password, UserRole userRole) {
+        super(userName, password, userRole);
     }
+
+    public Doctor(String userCode, String userName, String password, UserRole userRole) {
+        super(userCode, userName, password, userRole);
+    }
+    
+    
 
     public int getDoctorId() {
         return doctorId;
