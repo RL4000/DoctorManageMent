@@ -144,7 +144,7 @@ public class Main {
                     case 7:
                         userController.logout();
                         loginMenu();
-                        break;
+                        return;
                     default:
                         break;
 
@@ -176,7 +176,7 @@ public class Main {
                     case 4:
                         userController.logout();
                         loginMenu();
-                        break;
+                        return;
                     default:
                         break;
                 }
