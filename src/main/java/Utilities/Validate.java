@@ -33,7 +33,7 @@ public final class Validate {
     static Pattern p4 = Pattern.compile("^[0-9]{3} [0-9]{3} [0-9]{4}$");
     static Pattern p5 = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4} [e|ext][0-9]{4}$");
     static Pattern p6 = Pattern.compile("^\\([0-9]{3}\\)-[0-9]{3}-[0-9]{4}$");
-    static Pattern patternUsername = Pattern.compile("^[A-Za-z][A-Za-z0-9]*{4,}$");
+    static Pattern patternUsername = Pattern.compile("^[A-Za-z][A-Za-z0-9]{4,}$");
     static Pattern patternPassword = Pattern.compile("^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{6,}$");
     
     /**
