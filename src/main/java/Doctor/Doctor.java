@@ -8,7 +8,6 @@ package Doctor;
 
 
 import Common.User;
-import org.jetbrains.annotations.Nullable;
 import java.util.Date;
 
 /**
@@ -23,7 +22,7 @@ public class Doctor extends User{
     public Doctor() {
     }
 
-    public Doctor(String userCode, String userName, String password, @Nullable int doctorId, String specialization, Date availability) {
+    public Doctor(String userCode, String userName, String password, int doctorId, String specialization, Date availability) {
         super(userCode, userName, password);
         this.doctorId = doctorId;
         this.specialization = specialization;
