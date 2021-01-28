@@ -47,7 +47,7 @@ public final class Validate {
         while (true) {
             System.out.print(MSG);
             String check = in.readLine().trim();
-            if (patternUsername.matcher(check).find()) {
+            if (patternPassword.matcher(check).find()) {
                 return check;
             } else {
                 System.out.println(ConsoleColors.RED + "Wrong format! (Password >=6 char, include both number and char, not include any other type of char)");

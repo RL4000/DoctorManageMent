@@ -35,10 +35,11 @@ public class Main {
 
         //------------------ADD TAM DATA VAO FILE USERS.DAT DE TEST, XOA SAU
         users = new ArrayList<>();
-        users.add(new Admin("admin", "admin", UserRole.ADMIN));
-        users.add(new Doctor("doctor01", "doctor01", UserRole.AUTHORIZED_DOCTOR));
-        users.add(new Admin("doctor02", "doctor02", UserRole.ADMIN));
-        users.add(new Admin("doctor03", "doctor03", UserRole.ADMIN));
+        
+        users.add(new Admin("adminCode", "admin", "admin", UserRole.ADMIN));
+        users.add(new Doctor("doctor01", "doctor01", "doctor01", UserRole.AUTHORIZED_DOCTOR));
+        users.add(new Admin("doctor02", "doctor02", "doctor02", UserRole.ADMIN));
+        users.add(new Admin("doctor03", "doctor03", "doctor03", UserRole.ADMIN));
         new UserDataIO().writeData(users);
         //------------------ADD TAM DATA VAO FILE USERS.DAT DE TEST, XOA SAU
 
@@ -138,7 +139,7 @@ public class Main {
                         
                         break;
                     case 6:
-                        
+                        userController.changePassword();
                         break;
                     case 7:
                         userController.logout();
@@ -170,7 +171,7 @@ public class Main {
                         
                         break;
                     case 3:
-                        
+                        userController.changePassword();
                         break;
                     case 4:
                         userController.logout();

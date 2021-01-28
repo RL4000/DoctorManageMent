@@ -5,6 +5,7 @@
  */
 package User;
 
+import Utilities.UserDataIO;
 import java.util.ArrayList;
 
 /**
@@ -13,11 +14,12 @@ import java.util.ArrayList;
  */
 public class UserView {
     ArrayList<User> users;
-
+    UserDataIO userDataIO;
     public static UserView userView = null;
     
     public UserView() {
         users = new ArrayList<User>();
+        userDataIO = new UserDataIO();
     }
     
     public static UserView getInstance(){
@@ -29,22 +31,35 @@ public class UserView {
     }
 
     public ArrayList<User> getUsers() {
-        return users;
+        return userDataIO.readData();
     }
     
     public void addUser(User user){
+        users = userDataIO.readData();
         users.add(user);
+        userDataIO.writeData(users);
     }
     
     
     public void deleteUser(String userCode){
+        users = userDataIO.readData();
         users.forEach((u) -> {
             if (u.getUserCode().equalsIgnoreCase(userCode)) {
             users.remove(u);
         }});
+        userDataIO.writeData(users);
     }
     
-    
+    public void updateUser(User userUpdate){
+        users = userDataIO.readData();
+        users.forEach((u) -> {
+            if (u.getUserCode().equalsIgnoreCase(userUpdate.getUserCode())) {
+            u.setUserName(userUpdate.getUserName());
+            u.setPassword(userUpdate.getPassword());
+        }});
+        userDataIO.writeData(users);
+        
+    }
     
     
     
