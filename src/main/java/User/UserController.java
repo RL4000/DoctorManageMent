@@ -57,24 +57,19 @@ public class UserController {
             userName = validate.getString("Input username: ");
             password = validate.getString("Input password: ");
 
-            user = new User();
-            user.setUserName(userName);
-            user.setPassword(password);
+            
 
             users.forEach((u) -> {
-                if (u.getUserName().equals(user.getUserName()) && u.getPassword().equals(user.getPassword())) {
+                if (u.getUserName().equals(userName) && u.getPassword().equals(password)) {
+                    user = new User();
+                    user.setUserName(userName);
+                    user.setPassword(password);
                     user.setUserCode(u.getUserCode());
-                    user.setIsLoggedIn(Boolean.TRUE);
                     user.setUserRole(u.getUserRole());
                 }
             });
 
-            if (user.getIsLoggedIn()) {
-                return true;
-            } else {
-                user = null;
-                return false;
-            }
+            return (user!=null);
 
         } catch (Exception ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
