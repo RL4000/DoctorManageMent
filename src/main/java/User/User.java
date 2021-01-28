@@ -17,7 +17,6 @@ public class User implements Serializable{
     private String userName; //>=5 chars, must start with a letter
     private String password; //>=6 chars, include both letter & numbers, no other type of chars
     private UserRole userRole; //0 = ADMIN, 1 = DOCTOR
-    private Boolean isLoggedIn = false;
     
     public User() {
     }
@@ -70,14 +69,5 @@ public class User implements Serializable{
     public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
     }
-
-    public Boolean getIsLoggedIn() {
-        return isLoggedIn;
-    }
-
-    public void setIsLoggedIn(Boolean isLoggedIn) {
-        this.isLoggedIn = isLoggedIn;
-    }
-    
     
 }
