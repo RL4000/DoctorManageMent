@@ -11,5 +11,6 @@ package Common;
  */
 public enum UserRole {
     ADMIN,
-    DOCTOR
+    DOCTOR,
+    AUTHORIZED_DOCTOR
 }

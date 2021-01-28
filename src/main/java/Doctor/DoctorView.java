@@ -6,7 +6,7 @@
 package Doctor;
 
 import Common.UserRole;
-import Common.User;
+import User.User;
 
 /**
  *
@@ -14,8 +14,7 @@ import Common.User;
  */
 public class DoctorView {
     
+    
     public void something(){
-        User u = new User();
-        u.setUserRole(UserRole.ADMIN);
     }
 }
