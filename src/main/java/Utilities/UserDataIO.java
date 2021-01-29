@@ -6,49 +6,67 @@
 package Utilities;
 
 import User.User;
+import Doctor.Doctor;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OptionalDataException;
 import java.util.ArrayList;
-import java.util.List;
 
-/**
- *
- * @author Admin
- */
 public class UserDataIO {
 
     public UserDataIO() {
     }
 
-    public ArrayList<User> readData() {
-        ArrayList<User> users = null;
-    try {
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream("users.dat"));
-        users = (ArrayList<User>) in.readObject(); 
-        in.close();
-    }
-    catch(Exception e) {
-        System.out.println(e.getMessage());
-    }
-
-        return users;
-    }
-
-    public void writeData(List<User> users) {
+    public ArrayList<User> readDataUser() {
         try {
-            FileOutputStream fos = new FileOutputStream("users.dat");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(users);
-            oos.close();
-            fos.close();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("users.dat"))) {
+                return (ArrayList<User>) in.readObject();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
+    public void writeDataUser(ArrayList<User> users) {
+        try {
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("users.dat"))) {
+                oos.writeObject(users);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Doctor> readDataDoctor() {
+        try {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("doctor.dat"))) {
+                return (ArrayList<Doctor>) ois.readObject();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void writeDateDoctor(ArrayList<Doctor> doctors) {
+        try {
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("doctor.dat"))) {
+                oos.writeObject(doctors);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Doctor getDoctorByUserCode(String userCode){
+        for (Doctor doctor : readDataDoctor()) {
+            if (doctor.getUserCode().equals(userCode)) {
+                return doctor;
+            }
+        }
+        return null;
+    }
 }

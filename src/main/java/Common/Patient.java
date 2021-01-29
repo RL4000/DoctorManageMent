@@ -68,6 +68,12 @@ public class Patient {
     public void setConsultNote(String consultNote) {
         this.consultNote = consultNote;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%-10s|%-10s|%-10s|%-20s|%-20s", patientId, name, diseaseType, consultDate, consultNote);
+    }
+   
     
     
     

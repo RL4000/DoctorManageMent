@@ -5,6 +5,7 @@
  */
 
 import Admin.Admin;
+import Admin.AdminController;
 import Common.ConsoleColors;
 import Common.UserRole;
 import Doctor.Doctor;
@@ -27,6 +28,7 @@ public class Main {
     static ArrayList<User> users;
     static Validate validate;
     static UserController userController;
+    static AdminController adminController;
 
     public static void main(String[] args) {
 
@@ -40,7 +42,7 @@ public class Main {
         users.add(new Doctor("doctor01", "doctor01", "doctor01", UserRole.AUTHORIZED_DOCTOR));
         users.add(new Admin("doctor02", "doctor02", "doctor02", UserRole.ADMIN));
         users.add(new Admin("doctor03", "doctor03", "doctor03", UserRole.ADMIN));
-        new UserDataIO().writeData(users);
+        new UserDataIO().writeDataUser(users);
         //------------------ADD TAM DATA VAO FILE USERS.DAT DE TEST, XOA SAU
 
         loginMenu();
@@ -131,7 +133,7 @@ public class Main {
                         
                         break;
                     case 2:
-                        
+                        adminController.processing();
                         break;
                     case 3:
                         

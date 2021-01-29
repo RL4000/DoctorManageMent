@@ -35,13 +35,7 @@ public final class Validate {
     static Pattern p6 = Pattern.compile("^\\([0-9]{3}\\)-[0-9]{3}-[0-9]{4}$");
     static Pattern patternUsername = Pattern.compile("^[A-Za-z][A-Za-z0-9]{4,}$");
     static Pattern patternPassword = Pattern.compile("^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{6,}$");
-    
-    /**
-     *
-     * @param MSG
-     * @return A String must not empty
-     * @throws IOException
-     */
+   
     
     public String getPassword(String MSG) throws IOException {
         while (true) {
