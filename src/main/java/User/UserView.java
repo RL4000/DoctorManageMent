@@ -155,6 +155,7 @@ public class UserView {
                     password = validate.getPassword("Type in your Password: ");
                     User u = new User(UserName, password, UserRole.USER);
                     addUser(u);
+                    return;
                 case 0:
                 default:
                     break;
