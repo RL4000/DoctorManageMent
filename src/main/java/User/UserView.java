@@ -128,7 +128,7 @@ public class UserView {
                     password = validate.getPassword(askPass);
                     Admin newAdmin = new Admin(UserCode, UserName, password, UserRole.ADMIN);
                     addUser(newAdmin);
-                    return;
+                    break;
 
                 case 2:
                     password = validate.getPassword(askPass);
@@ -139,7 +139,7 @@ public class UserView {
                     newAuthDoctor.setSpecialization(in.nextLine());
                     newAuthDoctor.setAvailability(validate.getDate_LimitToCurrent(askDoctorAvailability));
                     addUser(newAuthDoctor);
-                    return;
+                    break;
 
                 case 3:
                     int docID = getDoctorHighestID();
@@ -149,14 +149,15 @@ public class UserView {
                     newDoctor.setSpecialization(in.nextLine());
                     newDoctor.setAvailability(validate.getDate_LimitToCurrent(askDoctorAvailability));
                     addUser(newDoctor);
-                    return;
+                    break;
 
                 case 4:
                     password = validate.getPassword("Type in your Password: ");
                     User u = new User(UserName, password, UserRole.USER);
                     addUser(u);
-                    return;
+                    break;
                 case 0:
+                    break;
                 default:
                     break;
             }
