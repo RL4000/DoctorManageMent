@@ -33,6 +33,7 @@ public class Main {
 
         validate = new Validate();
         userController = UserController.getInstance();
+        adminController = new AdminController();
 
         //------------------ADD TAM DATA VAO FILE USERS.DAT DE TEST, XOA SAU
         users = new ArrayList<>();

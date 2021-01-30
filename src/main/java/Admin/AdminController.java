@@ -7,10 +7,12 @@ package Admin;
 
 import Common.ConsoleColors;
 import Common.Patient;
+import Common.UserRole;
 import Utilities.Validate;
 import java.io.IOException;
 import Doctor.Doctor;
-import Utilities.DoctorDataIO;
+import User.User;
+import Utilities.UserDataIO;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -20,25 +22,49 @@ import java.util.Date;
  */
 public class AdminController {
 
-    DoctorDataIO doctorDataIO;
     Validate validate;
-    Doctor doctorGotByUserCode;
-    ArrayList<Patient> patients;
     ValidationAdminManager adminManager;
-    ArrayList<Doctor> doctors;
+    UserDataIO userDataIO;
+
+    ArrayList<User> listUser;
+    ArrayList<Doctor> listDoctor;
+    ArrayList<Patient> listPatients;
+    Doctor doctorGotByUserCode;
 
     public AdminController() {
-        doctorDataIO = new DoctorDataIO();
         validate = new Validate();
         adminManager = new ValidationAdminManager();
+        listDoctor = new ArrayList<>();
+        userDataIO = new UserDataIO();
+        listPatients = new ArrayList<>();
+        listUser = new ArrayList<>();
     }
 
     public void processing() throws IOException {
 
+        listUser.add(new Doctor("1", "doctor1", "doctor1", UserRole.AUTHORIZED_DOCTOR));
+        listUser.add(new Doctor("doctor2", "doctor2", UserRole.DOCTOR));
+        listUser.add(new Doctor("3", "doctor3", "doctor3", UserRole.AUTHORIZED_DOCTOR));
+        listUser.add(new Doctor("doctor4", "doctor4", UserRole.DOCTOR));
+        listUser.add(new Doctor("5", "doctor5", "doctor5", UserRole.AUTHORIZED_DOCTOR));
+        listUser.add(new Doctor("doctor6", "doctor6", UserRole.DOCTOR));
+        listUser.add(new Doctor("7", "doctor7", "doctor7", UserRole.AUTHORIZED_DOCTOR));
+        listUser.add(new Doctor("doctor8", "doctor8", UserRole.DOCTOR));
+
+        userDataIO.writeDataUser(listUser);
+
         while (true) {
+            listUser = userDataIO.readDataUser();
+            System.out.println(ConsoleColors.BLUE_BOLD + "LIST DOCTOR");
+            for (User user : listUser) {
+                if (user.getUserRole() == UserRole.AUTHORIZED_DOCTOR) {
+                    System.out.println((Doctor) user);
+                }
+            }
+            System.out.println("");
+
             String usercode = validate.getString("Enter usercode: ");
-            doctors = doctorDataIO.readDataDoctor();
-            doctorGotByUserCode = adminManager.getDoctorByUserCode(usercode, doctors);
+            doctorGotByUserCode = (Doctor) adminManager.getDoctorByUserCode(usercode, listUser);
 
             if (doctorGotByUserCode == null) {
                 System.out.println("Doctor is not exist!!!");
@@ -46,23 +72,36 @@ public class AdminController {
                 continue;
             }
 
-            patients = doctorGotByUserCode.getPatients();
+            listPatients = doctorGotByUserCode.getPatients();
 
-            System.out.println(ConsoleColors.BLUE_BACKGROUND + "LIST PATIENT");
-            System.out.println(String.format("%-10s|%-10s|%-10s|%-20s|%-20s", "ID", "NAME", "DESEASE TYPE", "CONSULT DATE", "CONSULT NOTE"));
-            patients.forEach((patient) -> {
-                System.out.println(patient);
-            });
-            System.out.println("");
+            if (listPatients.isEmpty()) {
+                System.out.println(ConsoleColors.RED + "List patient's this doctor is emty");
+            } else {
+                System.out.println(ConsoleColors.BLUE_BACKGROUND + "LIST PATIENT");
+                System.out.println(String.format("%-10s|%-10s|%-10s|%-20s|%-20s", "ID", "NAME", "DESEASE TYPE", "CONSULT DATE", "CONSULT NOTE"));
+                listPatients.forEach((patient) -> {
+                    System.out.println(patient);
+                });
+                System.out.println("");
+            }
 
             printMENU_AddUpdatePatient();
             int choice = validate.getINT_LIMIT("Enter choice: ", 1, 2);
             switch (choice) {
                 case 1:
                     addNewPatient();
+                    for (User user : listUser) {
+                        if (user.getUserRole() == UserRole.AUTHORIZED_DOCTOR) {
+                            System.out.println((Doctor) user);
+                        }
+                    }
+                    userDataIO.writeDataUser(listUser);
+
                     break;
                 case 2:
                     updateAPatient();
+
+                    userDataIO.writeDataUser(listUser);
                     break;
             }
             break;
@@ -79,7 +118,7 @@ public class AdminController {
     private void addNewPatient() throws IOException {
         while (true) {
             int patientid = validate.getINT_LIMIT("Enter patient id: ", 1, Integer.MAX_VALUE);
-            Patient patient = adminManager.idExist(patientid, patients);
+            Patient patient = adminManager.getPatientByPatientID(patientid, listPatients);
             if (patient != null) {
                 System.out.println(ConsoleColors.RED + "ID exist");
                 System.out.println("");
@@ -91,7 +130,8 @@ public class AdminController {
             Date consultDate = validate.getDate_LimitToCurrent("Enter consultDate: ");
             String consultNote = validate.getString("Enter consultNote: ");
 
-            patients.add(new Patient(patientid, name, name, consultDate, name));
+            listPatients.add(new Patient(patientid, name, diseaseType, consultDate, consultNote));
+
             break;
         }
 
@@ -100,23 +140,22 @@ public class AdminController {
     private void updateAPatient() throws IOException {
         while (true) {
             int patientid = validate.getINT_LIMIT("Enter patient id: ", 1, Integer.MAX_VALUE);
-            Patient patient = adminManager.idExist(patientid, patients);
+            Patient patient = adminManager.getPatientByPatientID(patientid, listPatients);
             if (patient == null) {
-                System.out.println("ID is not exist");
+                System.out.println(ConsoleColors.RED + "ID is not exist");
                 continue;
             }
-            
-            String name = validate.getString("Enter name: ");
-            String diseaseType = validate.getString("Enter diseaseType: ");
-            Date consultDate = validate.getDate_LimitToCurrent("Enter consultDate: ");
-            String consultNote = validate.getString("Enter consultNote: ");
-            
-            patient.setName(name);
-            patient.setDiseaseType(diseaseType);
-            patient.setConsultDate(consultDate);
-            patient.setConsultNote(consultNote);
-            break;
 
+            String newName = validate.getString("Enter name: ");
+            String newDiseaseType = validate.getString("Enter diseaseType: ");
+            Date newConsultDate = validate.getDate_LimitToCurrent("Enter consultDate: ");
+            String newConsultNote = validate.getString("Enter consultNote: ");
+
+            patient.setName(newName);
+            patient.setDiseaseType(newDiseaseType);
+            patient.setConsultDate(newConsultDate);
+            patient.setConsultNote(newConsultNote);
+            break;
         }
 
     }

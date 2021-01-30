@@ -32,6 +32,7 @@ public class UserDataIO {
 
     public void writeDataUser(ArrayList<User> users) {
         try {
+            
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("users.dat"))) {
                 oos.writeObject(users);
             }

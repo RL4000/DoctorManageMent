@@ -60,7 +60,6 @@ public class UserView {
             }
         });
         userDataIO.writeDataUser(users);
-
     }
 
 }

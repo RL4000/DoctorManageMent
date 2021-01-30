@@ -19,14 +19,13 @@ import java.util.Date;
 public class Doctor extends User implements Serializable {
 
     private int doctorId;
+    private String name;
     private String specialization;
     private Date availability; //
     private ArrayList<Patient> patients;
 
     public Doctor() {
     }
-    
-    
 
     public Doctor(String userName, String password, UserRole userRole) {
         super(userName, password, userRole);
@@ -34,6 +33,7 @@ public class Doctor extends User implements Serializable {
 
     public Doctor(String userCode, String userName, String password, UserRole userRole) {
         super(userCode, userName, password, userRole);
+        this.patients = new ArrayList<>();
     }
 
     public int getDoctorId() {
@@ -68,6 +68,17 @@ public class Doctor extends User implements Serializable {
         this.patients = patients;
     }
 
-    
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return getUserCode() + "\t" + getUserName() + "\t" + getPassword() +"\t";
+    }
 
 }

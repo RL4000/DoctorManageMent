@@ -12,28 +12,25 @@ import java.io.Serializable;
  *
  * @author Admin
  */
-public class User implements Serializable{
+public class User implements Serializable {
+
     private String userCode; //not null, unique
     private String userName; //>=5 chars, must start with a letter
     private String password; //>=6 chars, include both letter & numbers, no other type of chars
     private UserRole userRole; //0 = ADMIN, 1 = DOCTOR
-    
+
     public User() {
     }
 
-    
-    
-    
     public User(String userName, String password, UserRole userRole) {
         this.userName = userName;
         this.password = password;
         this.userRole = userRole;
     }
-    
 
     public User(String userCode, String userName, String password, UserRole userRole) {
         this.userCode = userCode;
-        this.userName = userName;   
+        this.userName = userName;
         this.password = password;
         this.userRole = userRole;
     }
@@ -69,5 +66,5 @@ public class User implements Serializable{
     public void setUserRole(UserRole userRole) {
         this.userRole = userRole;
     }
-    
+
 }

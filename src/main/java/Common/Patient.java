@@ -5,13 +5,14 @@
  */
 package Common;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  *
  * @author Admin
  */
-public class Patient {
+public class Patient implements Serializable{
     private int patientId;
     private String name;
     private String diseaseType;

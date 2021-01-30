@@ -7,6 +7,7 @@ package Admin;
 
 import Common.Patient;
 import Doctor.Doctor;
+import User.User;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  */
 public class ValidationAdminManager {
 
-    Patient idExist(int patientid, ArrayList<Patient> patients) {
+    public Patient getPatientByPatientID(int patientid, ArrayList<Patient> patients) {
         for (Patient patient : patients) {
             if (patient.getPatientId() == patientid) {
                 return patient;
@@ -24,10 +25,10 @@ public class ValidationAdminManager {
         return null;
     }
 
-    Doctor getDoctorByUserCode(String usercode, ArrayList<Doctor> doctors) {
-        for (Doctor doctor : doctors) {
-            if (usercode.equals(doctor.getUserCode())) {
-                return doctor;
+    public User getDoctorByUserCode(String usercode, ArrayList<User> users) {
+        for (User user : users) {
+            if (usercode.equals(user.getUserCode())) {
+                return user;
             }
         }
         return null;
