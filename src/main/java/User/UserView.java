@@ -13,8 +13,6 @@ import Utilities.Validate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -108,6 +106,10 @@ public class UserView {
     //function4.2
     public void inputNewUser() {
         users = getUsers();
+        String askPass = "Type in your Password: ";
+        String askUserName = "Type in your UserName: ";
+        String askDoctorSpecialization = "Enter doctor Specialization: ";
+        String askDoctorAvailability = "Enter availability: ";
         int choice = -1;
         try {
             System.out.println("what account you want to create\n"
@@ -121,23 +123,23 @@ public class UserView {
                 return;
             }
             String UserCode = inputUserCode();
-            String UserName = validate.getUsername("Type in your UserName: ");
+            String UserName = validate.getUsername(askUserName);
             String password;
             switch (choice) {
                 case 1:
-                    password = validate.getPassword("Type in your Password: ");
+                    password = validate.getPassword(askPass);
                     Admin newAdmin = new Admin(UserCode, UserName, password, UserRole.ADMIN);
                     addUser(newAdmin);
                     return;
 
                 case 2:
-                    password = validate.getPassword("Type in your Password: ");
+                    password = validate.getPassword(askPass);
                     int AuthDocID = getDoctorHighestID();
                     Doctor newAuthDoctor = new Doctor(UserCode, UserName, password, UserRole.AUTHORIZED_DOCTOR);
                     newAuthDoctor.setDoctorId(AuthDocID);
-                    System.out.print("Enter doctor Specialization: ");
+                    System.out.print(askDoctorSpecialization);
                     newAuthDoctor.setSpecialization(in.nextLine());
-                    newAuthDoctor.setAvailability(validate.getDate_LimitToCurrent("Enter future availability: "));
+                    newAuthDoctor.setAvailability(validate.getDate_LimitToCurrent(askDoctorAvailability));
                     addUser(newAuthDoctor);
                     return;
 
@@ -145,9 +147,9 @@ public class UserView {
                     int docID = getDoctorHighestID();
                     Doctor newDoctor = new Doctor(UserCode, UserName, null, UserRole.DOCTOR);
                     newDoctor.setDoctorId(docID);
-                    System.out.print("Enter doctor Specialization: ");
+                    System.out.print(askDoctorSpecialization);
                     newDoctor.setSpecialization(in.nextLine());
-                    newDoctor.setAvailability(validate.getDate_LimitToCurrent("Enter future availability"));
+                    newDoctor.setAvailability(validate.getDate_LimitToCurrent(askDoctorAvailability));
                     addUser(newDoctor);
                     return;
 
