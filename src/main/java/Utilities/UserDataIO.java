@@ -40,33 +40,5 @@ public class UserDataIO {
         }
     }
 
-    public ArrayList<Doctor> readDataDoctor() {
-        try {
-            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream("doctor.dat"))) {
-                return (ArrayList<Doctor>) ois.readObject();
-            }
-        } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public void writeDateDoctor(ArrayList<Doctor> doctors) {
-        try {
-            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("doctor.dat"))) {
-                oos.writeObject(doctors);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public Doctor getDoctorByUserCode(String userCode){
-        for (Doctor doctor : readDataDoctor()) {
-            if (doctor.getUserCode().equals(userCode)) {
-                return doctor;
-            }
-        }
-        return null;
-    }
+   
 }
