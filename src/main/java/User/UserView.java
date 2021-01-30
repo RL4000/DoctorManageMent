@@ -173,34 +173,35 @@ public class UserView {
         }
     }
 
+    public User askUpdate(User updateMe) throws IOException {
+        updateMe.setUserName(validate.getUsername("Type in this account new UserName: "));
+        while (true) {
+            String pass = validate.getPassword("Type in this account new password: ");
+            if (pass.equals(validate.getPassword("Confirm account new password: "))) {
+                updateMe.setPassword(pass);
+                break;
+            } else {
+                System.out.println("confirm new password is wrong! pls retype new password");
+            }
+        }
+        return updateMe;
+    }
+
     //function4.3
     public void findAndUpdateByUserCode() throws IOException {
         users = getUsers();
         while (true) {
             String code = validate.getUsername("Enter userCode needed to be deleted: ");
-            User u = null;
             users = userDataIO.readData();
             for (User find : users) {
                 if (find.getUserCode().equals(code)) {
-                    u = find;
-                    u.setUserName(validate.getUsername("Type in this account new UserName: "));
-                    while (true) {
-                        String pass = validate.getPassword("Type in this account new password: ");
-                        if (pass.equals(validate.getPassword("Confirm account new password: "))) {
-                            u.setPassword(pass);
-                            break;
-                        }else{
-                            System.out.println("confirm new password is wrong! pls retype new password");
-                        }
-                    }
-                    updateUser(u);
+                    find = askUpdate(find);
+                    updateUser(find);
                     return;
                 }
             }
-            if (u == null) {
-                System.out.println("Can't find the userCode: " + code);
-                System.out.println("please re-Enter the userCode that need to be update");
-            }
+            System.out.println("Can't find the userCode: " + code);
+            System.out.println("please re-Enter the userCode that need to be update");
         }
     }
 
@@ -244,6 +245,8 @@ public class UserView {
                         break;
                     case 0:
                         return;
+                    default:
+                        break;
                 }
             } catch (IOException ex) {
 
