@@ -79,9 +79,9 @@ public class UserView {
                     break;
                 }
             }
-            if (code == null){
+            if (code == null) {
                 System.out.println("this code already exist pls input another one");
-            }else{
+            } else {
                 return code;
             }
         }
@@ -221,33 +221,29 @@ public class UserView {
                     + " 4. deleted user\n"
                     + " 0. Back to main menu\n"
                     + "--------------------------------");
-            try {
-                choice = validate.getINT_LIMIT("Choose: ", 0, 4);
-                switch (choice) {
-                    case 1:
-                        users = getUsers();
-                        System.out.println("List of all User");
-                        for (User u : users) {
-                            System.out.println(u.toString());
-                        }
-                        System.out.println();
-                        break;
-                    case 2:
-                        inputNewUser();
-                        break;
-                    case 3:
-                        findAndUpdateByUserCode();
-                        break;
-                    case 4:
-                        findAndDeletedByUserCode();
-                        break;
-                    case 0:
-                        return;
-                    default:
-                        break;
-                }
-            } catch (IOException ex) {
-
+            choice = validate.getINT_LIMIT("Choose: ", 0, 4);
+            switch (choice) {
+                case 1:
+                    users = getUsers();
+                    System.out.println("List of all User");
+                    for (User u : users) {
+                        System.out.println(u.toString());
+                    }
+                    System.out.println();
+                    break;
+                case 2:
+                    inputNewUser();
+                    break;
+                case 3:
+                    findAndUpdateByUserCode();
+                    break;
+                case 4:
+                    findAndDeletedByUserCode();
+                    break;
+                case 0:
+                    return;
+                default:
+                    break;
             }
         }
     }
