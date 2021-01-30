@@ -108,7 +108,7 @@ public class UserView {
         String askUserName = "Type in your UserName: ";
         String askDoctorSpecialization = "Enter doctor Specialization: ";
         String askDoctorAvailability = "Enter availability: ";
-        int choice = -1;
+        int choice;
         try {
             System.out.println("what account you want to create\n"
                     + "1.Admin\n"
@@ -155,19 +155,14 @@ public class UserView {
                     password = validate.getPassword("Type in your Password: ");
                     User u = new User(UserName, password, UserRole.USER);
                     addUser(u);
-                    return;
-
                 case 0:
-                    return;
-
                 default:
                     break;
             }
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("error inputNewUser");
             System.out.println(e);
-            return;
         }
     }
 
