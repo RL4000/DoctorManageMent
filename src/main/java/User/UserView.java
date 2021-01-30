@@ -73,18 +73,16 @@ public class UserView {
     public String inputUserCode() throws IOException {
         while (true) {
             String code = validate.getUsername("input new user code: ");
-            boolean exist = false;
             for (User u : users) {
                 if (u.getUserCode().equalsIgnoreCase(code)) {
-                    exist = true;
+                    code = null;
                     break;
                 }
             }
-            if (!exist) {
-                return code;
-            } else {
-                exist = false;
+            if (code == null){
                 System.out.println("this code already exist pls input another one");
+            }else{
+                return code;
             }
         }
     }
