@@ -10,6 +10,7 @@ import Common.UserRole;
 import Doctor.Doctor;
 import User.User;
 import User.UserController;
+import User.UserView;
 import Utilities.UserDataIO;
 import Utilities.Validate;
 import java.io.IOException;
@@ -137,7 +138,8 @@ public class Main {
                         
                         break;
                     case 4:
-                        
+                        UserView u = new UserView();
+                        u.doFunction4();
                         break;
                     case 5:
                         
