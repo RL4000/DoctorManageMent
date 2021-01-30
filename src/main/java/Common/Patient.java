@@ -12,7 +12,8 @@ import java.util.Date;
  *
  * @author Admin
  */
-public class Patient implements Serializable{
+public class Patient implements Serializable {
+
     private int patientId;
     private String name;
     private String diseaseType;
@@ -74,8 +75,5 @@ public class Patient implements Serializable{
     public String toString() {
         return String.format("%-10s|%-10s|%-10s|%-20s|%-20s", patientId, name, diseaseType, consultDate, consultNote);
     }
-   
-    
-    
-    
+
 }

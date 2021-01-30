@@ -78,7 +78,7 @@ public class Doctor extends User implements Serializable {
 
     @Override
     public String toString() {
-        return getUserCode() + "\t" + getUserName() + "\t" + getPassword() +"\t";
+        return getUserCode() + "\t" + getName()+ "\t";
     }
 
 }

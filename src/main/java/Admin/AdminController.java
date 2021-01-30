@@ -26,37 +26,37 @@ public class AdminController {
     ValidationAdminManager adminManager;
     UserDataIO userDataIO;
 
-    ArrayList<User> listUser;
-    ArrayList<Doctor> listDoctor;
+    ArrayList<User> listUsers;
+    ArrayList<Doctor> listDoctors;
     ArrayList<Patient> listPatients;
     Doctor doctorGotByUserCode;
 
     public AdminController() {
         validate = new Validate();
         adminManager = new ValidationAdminManager();
-        listDoctor = new ArrayList<>();
+        listDoctors = new ArrayList<>();
         userDataIO = new UserDataIO();
         listPatients = new ArrayList<>();
-        listUser = new ArrayList<>();
+        listUsers = new ArrayList<>();
     }
 
     public void processing() throws IOException {
 
-        listUser.add(new Doctor("1", "doctor1", "doctor1", UserRole.AUTHORIZED_DOCTOR));
-        listUser.add(new Doctor("doctor2", "doctor2", UserRole.DOCTOR));
-        listUser.add(new Doctor("3", "doctor3", "doctor3", UserRole.AUTHORIZED_DOCTOR));
-        listUser.add(new Doctor("doctor4", "doctor4", UserRole.DOCTOR));
-        listUser.add(new Doctor("5", "doctor5", "doctor5", UserRole.AUTHORIZED_DOCTOR));
-        listUser.add(new Doctor("doctor6", "doctor6", UserRole.DOCTOR));
-        listUser.add(new Doctor("7", "doctor7", "doctor7", UserRole.AUTHORIZED_DOCTOR));
-        listUser.add(new Doctor("doctor8", "doctor8", UserRole.DOCTOR));
+        listUsers.add(new Doctor("1", "doctor1", "doctor1", UserRole.AUTHORIZED_DOCTOR));
+        listUsers.add(new Doctor("doctor2", "doctor2", UserRole.DOCTOR));
+        listUsers.add(new Doctor("3", "doctor3", "doctor3", UserRole.AUTHORIZED_DOCTOR));
+        listUsers.add(new Doctor("doctor4", "doctor4", UserRole.DOCTOR));
+        listUsers.add(new Doctor("5", "doctor5", "doctor5", UserRole.AUTHORIZED_DOCTOR));
+        listUsers.add(new Doctor("doctor6", "doctor6", UserRole.DOCTOR));
+        listUsers.add(new Doctor("7", "doctor7", "doctor7", UserRole.AUTHORIZED_DOCTOR));
+        listUsers.add(new Doctor("doctor8", "doctor8", UserRole.DOCTOR));
 
-        userDataIO.writeDataUser(listUser);
+        userDataIO.writeDataUser(listUsers);
 
         while (true) {
-            listUser = userDataIO.readDataUser();
+            listUsers = userDataIO.readDataUser();
             System.out.println(ConsoleColors.BLUE_BOLD + "LIST DOCTOR");
-            for (User user : listUser) {
+            for (User user : listUsers) {
                 if (user.getUserRole() == UserRole.AUTHORIZED_DOCTOR) {
                     System.out.println((Doctor) user);
                 }
@@ -64,7 +64,7 @@ public class AdminController {
             System.out.println("");
 
             String usercode = validate.getString("Enter usercode: ");
-            doctorGotByUserCode = (Doctor) adminManager.getDoctorByUserCode(usercode, listUser);
+            doctorGotByUserCode = (Doctor) adminManager.getDoctorByUserCode(usercode, listUsers);
 
             if (doctorGotByUserCode == null) {
                 System.out.println("Doctor is not exist!!!");
@@ -77,7 +77,7 @@ public class AdminController {
             if (listPatients.isEmpty()) {
                 System.out.println(ConsoleColors.RED + "List patient's this doctor is emty");
             } else {
-                System.out.println(ConsoleColors.BLUE_BACKGROUND + "LIST PATIENT");
+                System.out.println(ConsoleColors.BLUE_BOLD + "LIST PATIENT");
                 System.out.println(String.format("%-10s|%-10s|%-10s|%-20s|%-20s", "ID", "NAME", "DESEASE TYPE", "CONSULT DATE", "CONSULT NOTE"));
                 listPatients.forEach((patient) -> {
                     System.out.println(patient);
@@ -90,18 +90,16 @@ public class AdminController {
             switch (choice) {
                 case 1:
                     addNewPatient();
-                    for (User user : listUser) {
+                    for (User user : listUsers) {
                         if (user.getUserRole() == UserRole.AUTHORIZED_DOCTOR) {
                             System.out.println((Doctor) user);
                         }
                     }
-                    userDataIO.writeDataUser(listUser);
-
+                    userDataIO.writeDataUser(listUsers);
                     break;
                 case 2:
                     updateAPatient();
-
-                    userDataIO.writeDataUser(listUser);
+                    userDataIO.writeDataUser(listUsers);
                     break;
             }
             break;
@@ -131,7 +129,7 @@ public class AdminController {
             String consultNote = validate.getString("Enter consultNote: ");
 
             listPatients.add(new Patient(patientid, name, diseaseType, consultDate, consultNote));
-
+                
             break;
         }
 
@@ -157,7 +155,5 @@ public class AdminController {
             patient.setConsultNote(newConsultNote);
             break;
         }
-
     }
-
 }

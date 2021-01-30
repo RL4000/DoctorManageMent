@@ -6,7 +6,6 @@
 package Utilities;
 
 import User.User;
-import Doctor.Doctor;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -32,7 +31,6 @@ public class UserDataIO {
 
     public void writeDataUser(ArrayList<User> users) {
         try {
-            
             try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("users.dat"))) {
                 oos.writeObject(users);
             }
