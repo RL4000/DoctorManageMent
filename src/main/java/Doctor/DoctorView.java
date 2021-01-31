@@ -5,8 +5,6 @@
  */
 package Doctor;
 
-import Common.UserRole;
-import User.User;
 
 /**
  *
