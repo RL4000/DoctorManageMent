@@ -42,8 +42,11 @@ public class AdminController {
 
     public void processing() throws IOException {
         //--------Đọc data, xóa sau
+<<<<<<< HEAD
         
         System.out.println("dfngdng");
+=======
+>>>>>>> d6e05b685b1c09c74c957e70c37674dd58b2d8bf
         listUsers.add(new Doctor("1", "doctor1", "doctor1", UserRole.AUTHORIZED_DOCTOR));
         listUsers.add(new Doctor("doctor2", "doctor2", UserRole.DOCTOR));
         listUsers.add(new Doctor("3", "doctor3", "doctor3", UserRole.AUTHORIZED_DOCTOR));
