@@ -27,21 +27,22 @@ public final class Validate {
     private static final String EMAIL_VALID = "^[A-Za-z0-9.+-_%]+@[A-Za-z.-]+\\.[A-Za-z]{2,4}$";
 
     //getPhone
-    static Pattern p1 = Pattern.compile("^[0-9]{10}$");
-    static Pattern p2 = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$");
-    static Pattern p3 = Pattern.compile("^[0-9]{3}.[0-9]{3}.[0-9]{4}$");
-    static Pattern p4 = Pattern.compile("^[0-9]{3} [0-9]{3} [0-9]{4}$");
-    static Pattern p5 = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4} [e|ext][0-9]{4}$");
-    static Pattern p6 = Pattern.compile("^\\([0-9]{3}\\)-[0-9]{3}-[0-9]{4}$");
-    static Pattern patternUsername = Pattern.compile("^[A-Za-z][A-Za-z0-9]{4,}$");
-    static Pattern patternPassword = Pattern.compile("^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{6,}$");
-   
+    static Pattern PHONE_NUMBER_1 = Pattern.compile("^[0-9]{10}$");
+    static Pattern PHONE_NUMBER_2 = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$");
+    static Pattern PHONE_NUMBER_3 = Pattern.compile("^[0-9]{3}.[0-9]{3}.[0-9]{4}$");
+    static Pattern PHONE_NUMBER_4 = Pattern.compile("^[0-9]{3} [0-9]{3} [0-9]{4}$");
+    static Pattern PHONE_NUMBER_5 = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4} [e|ext][0-9]{4}$");
+    static Pattern PHONE_NUMBER_6 = Pattern.compile("^\\([0-9]{3}\\)-[0-9]{3}-[0-9]{4}$");
     
+    
+    static Pattern PATTERN_USERNAME = Pattern.compile("^[A-Za-z][A-Za-z0-9]{4,}$");
+    static Pattern PATTERN_PASSWORD = Pattern.compile("^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{6,}$");
+
     public String getPassword(String MSG) throws IOException {
         while (true) {
             System.out.print(MSG);
             String check = in.readLine().trim();
-            if (patternPassword.matcher(check).find()) {
+            if (PATTERN_PASSWORD.matcher(check).find()) {
                 return check;
             } else {
                 System.out.println(ConsoleColors.RED + "Wrong format! (Password >=6 char, include both number and char, not include any other type of char)");
@@ -49,12 +50,12 @@ public final class Validate {
             }
         }
     }
-    
+
     public String getUsername(String MSG) throws IOException {
         while (true) {
             System.out.print(MSG);
             String check = in.readLine().trim();
-            if (patternUsername.matcher(check).find()) {
+            if (PATTERN_USERNAME.matcher(check).find()) {
                 return check;
             } else {
                 System.out.println(ConsoleColors.RED + "Wrong format! (Password >=5 char, starts with character)");
@@ -62,15 +63,13 @@ public final class Validate {
             }
         }
     }
-   
-    
+
     public String getString(String MSG) throws IOException {
         while (true) {
             System.out.print(MSG);
             String check = in.readLine().trim();
             if (check.isEmpty()) {
                 System.err.println("Input is not empty");
-                continue;
             } else {
                 return check;
             }
@@ -198,19 +197,19 @@ public final class Validate {
     public String getPhone(String MSG) throws IOException {
         while (true) {
             String phone = getString(MSG);
-            if (p1.matcher(phone).find() || p2.matcher(phone).find()
-              || p3.matcher(phone).find() || p4.matcher(phone).find()
-              || p5.matcher(phone).find() || p6.matcher(phone).find()) {
+            if (PHONE_NUMBER_1.matcher(phone).find() || PHONE_NUMBER_2.matcher(phone).find()
+                    || PHONE_NUMBER_3.matcher(phone).find() || PHONE_NUMBER_4.matcher(phone).find()
+                    || PHONE_NUMBER_5.matcher(phone).find() || PHONE_NUMBER_6.matcher(phone).find()) {
                 return phone;
             } else {
                 if (getYesNo("Do you want show fomat: ")) {
                     System.err.println("Enter\n1234567890\n"
-                      + "123-456-7890\n"
-                      + "123.456.7890\n"
-                      + "123 456 7890\n"
-                      + "(123)-456-7890\n"
-                      + "123-456-7890 x1234\n"
-                      + "123-456-7890 ext1234");
+                            + "123-456-7890\n"
+                            + "123.456.7890\n"
+                            + "123 456 7890\n"
+                            + "(123)-456-7890\n"
+                            + "123-456-7890 x1234\n"
+                            + "123-456-7890 ext1234");
                 } else {
                     System.err.println("Enter again");
                 }
@@ -218,12 +217,6 @@ public final class Validate {
         }
     }
 
-    /**
-     * 
-     * @param MSG
-     * @return A day is not limit
-     * @throws IOException 
-     */
     public Date getDate(String MSG) throws IOException {
         Date now = new Date();
         while (true) {
@@ -239,12 +232,6 @@ public final class Validate {
         }
     }
 
-    /**
-     * 
-     * @param MSG
-     * @return A day is limit with current
-     * @throws IOException 
-     */
     public Date getDate_LimitToCurrent(String MSG) throws IOException {
         Date now = new Date();
         while (true) {
@@ -266,14 +253,14 @@ public final class Validate {
     public int getAge(Date birthDay) {
         Calendar now = Calendar.getInstance();
         Calendar birth = Calendar.getInstance();
-        
+
         //Sets this Calendar's time with the given
         birth.setTime(birthDay);
-        
+
         if (birth.after(now)) {
             throw new IllegalArgumentException("Can't be born in the future");
         }
-        
+
         //Calculator age
         int age = now.get(Calendar.YEAR) - birth.get(Calendar.YEAR);
         int month1 = now.get(Calendar.MONTH);

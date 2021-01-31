@@ -41,7 +41,7 @@ public class AdminController {
     }
 
     public void processing() throws IOException {
-
+        //--------Đọc data, xóa sau
         listUsers.add(new Doctor("1", "doctor1", "doctor1", UserRole.AUTHORIZED_DOCTOR));
         listUsers.add(new Doctor("doctor2", "doctor2", UserRole.DOCTOR));
         listUsers.add(new Doctor("3", "doctor3", "doctor3", UserRole.AUTHORIZED_DOCTOR));
@@ -58,10 +58,10 @@ public class AdminController {
             System.out.println(ConsoleColors.BLUE_BOLD + "LIST DOCTOR");
             for (User user : listUsers) {
                 if (user.getUserRole() == UserRole.AUTHORIZED_DOCTOR) {
-                    System.out.println((Doctor) user);
+                    System.out.println(user);
                 }
             }
-            System.out.println("");
+            System.err.println(ConsoleColors.RED + "Size: " + listUsers.size());
 
             String usercode = validate.getString("Enter usercode: ");
             doctorGotByUserCode = (Doctor) adminManager.getDoctorByUserCode(usercode, listUsers);
@@ -90,16 +90,15 @@ public class AdminController {
             switch (choice) {
                 case 1:
                     addNewPatient();
-                    for (User user : listUsers) {
-                        if (user.getUserRole() == UserRole.AUTHORIZED_DOCTOR) {
-                            System.out.println((Doctor) user);
-                        }
-                    }
+                    System.err.println(ConsoleColors.RED +"Size" + listUsers.size());
+
                     userDataIO.writeDataUser(listUsers);
                     break;
                 case 2:
-                    updateAPatient();
-                    userDataIO.writeDataUser(listUsers);
+                    if (!listPatients.isEmpty()) {
+                        updateAPatient();
+                        userDataIO.writeDataUser(listUsers);
+                    }
                     break;
             }
             break;
@@ -129,7 +128,7 @@ public class AdminController {
             String consultNote = validate.getString("Enter consultNote: ");
 
             listPatients.add(new Patient(patientid, name, diseaseType, consultDate, consultNote));
-                
+
             break;
         }
 
