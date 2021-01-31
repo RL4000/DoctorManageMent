@@ -82,7 +82,7 @@ public class Main {
     }
 
     private static void loginMenu() {
-        int choice = -1;
+        int choice;
         while (true) {
             try {
                 printLoginMenu();
@@ -122,7 +122,7 @@ public class Main {
     }
 
     private static void adminMenu() {
-        int choice = -1;
+        int choice;
         while (true) {
             try {
                 printAdminMenu();
@@ -165,7 +165,7 @@ public class Main {
     }
 
     private static void doctorMenu() {
-        int choice = -1;
+        int choice;
         while (true) {
             try {
                 printDoctorMenu();
