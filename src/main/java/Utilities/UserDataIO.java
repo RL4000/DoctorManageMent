@@ -7,14 +7,14 @@ package Utilities;
 
 import User.User;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OptionalDataException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -26,28 +26,41 @@ public class UserDataIO {
     }
 
     public ArrayList<User> readData() {
+        ObjectInputStream in = null;
         ArrayList<User> users = null;
-    try {
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream("users.dat"));
-        users = (ArrayList<User>) in.readObject(); 
-        in.close();
-    }
-    catch(Exception e) {
-        System.out.println(e.getMessage());
-    }
+        try {
+            in = new ObjectInputStream(new FileInputStream("users.dat"));
+            users = (ArrayList<User>) in.readObject();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        } finally {
+            try {
+                in.close();
+            } catch (IOException ex) {
+                Logger.getLogger(UserDataIO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
         return users;
     }
 
     public void writeData(List<User> users) {
+        FileOutputStream fos = null;
+        ObjectOutputStream oos = null;
         try {
-            FileOutputStream fos = new FileOutputStream("users.dat");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            fos = new FileOutputStream("users.dat");
+            oos = new ObjectOutputStream(fos);
             oos.writeObject(users);
-            oos.close();
-            fos.close();
+
         } catch (IOException ioe) {
             ioe.printStackTrace();
+        } finally {
+            try {
+                oos.close();
+                fos.close();
+            } catch (IOException ex) {
+                Logger.getLogger(UserDataIO.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 

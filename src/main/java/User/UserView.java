@@ -58,11 +58,6 @@ public class UserView {
             u.setPassword(userUpdate.getPassword());
         }});
         userDataIO.writeData(users);
-        
     }
-    
-    
-    
-    
     
 }
