@@ -21,59 +21,56 @@ import java.util.Date;
  * @author Admin
  */
 public class AdminController {
-
+    
     Validate validate;
     ValidationAdminManager adminManager;
     UserDataIO userDataIO;
-
+    
     ArrayList<User> listUsers;
-    ArrayList<Doctor> listDoctors;
     ArrayList<Patient> listPatients;
     Doctor doctorGotByUserCode;
-
+    
     public AdminController() {
         validate = new Validate();
         adminManager = new ValidationAdminManager();
-        listDoctors = new ArrayList<>();
         userDataIO = new UserDataIO();
         listPatients = new ArrayList<>();
         listUsers = new ArrayList<>();
     }
-
+    
     public void processing() throws IOException {
         //--------Đọc data, xóa sau
+        initMemoryData();
+        listUsers = new ArrayList<>();
         listUsers.add(new Doctor("1", "doctor1", "doctor1", UserRole.AUTHORIZED_DOCTOR));
         listUsers.add(new Doctor("doctor2", "doctor2", UserRole.DOCTOR));
         listUsers.add(new Doctor("3", "doctor3", "doctor3", UserRole.AUTHORIZED_DOCTOR));
         listUsers.add(new Doctor("doctor4", "doctor4", UserRole.DOCTOR));
         listUsers.add(new Doctor("5", "doctor5", "doctor5", UserRole.AUTHORIZED_DOCTOR));
-        listUsers.add(new Doctor("doctor6", "doctor6", UserRole.DOCTOR));
-        listUsers.add(new Doctor("7", "doctor7", "doctor7", UserRole.AUTHORIZED_DOCTOR));
-        listUsers.add(new Doctor("doctor8", "doctor8", UserRole.DOCTOR));
-
         userDataIO.writeDataUser(listUsers);
-
+        
         while (true) {
+            listUsers = new ArrayList<>();
             listUsers = userDataIO.readDataUser();
             System.out.println(ConsoleColors.BLUE_BOLD + "LIST DOCTOR");
             for (User user : listUsers) {
                 if (user.getUserRole() == UserRole.AUTHORIZED_DOCTOR) {
                     System.out.println(user);
                 }
-            }
-            System.err.println(ConsoleColors.RED + "Size: " + listUsers.size());
+            }            
+            System.err.println(ConsoleColors.RED + "Size: " + listUsers.size()); //8 element
 
             String usercode = validate.getString("Enter usercode: ");
             doctorGotByUserCode = (Doctor) adminManager.getDoctorByUserCode(usercode, listUsers);
-
+            
             if (doctorGotByUserCode == null) {
                 System.out.println("Doctor is not exist!!!");
                 System.out.println("");
                 continue;
             }
-
+            
             listPatients = doctorGotByUserCode.getPatients();
-
+            
             if (listPatients.isEmpty()) {
                 System.out.println(ConsoleColors.RED + "List patient's this doctor is emty");
             } else {
@@ -84,34 +81,36 @@ public class AdminController {
                 });
                 System.out.println("");
             }
-
+            
             printMENU_AddUpdatePatient();
             int choice = validate.getINT_LIMIT("Enter choice: ", 1, 2);
             switch (choice) {
                 case 1:
                     addNewPatient();
-                    System.err.println(ConsoleColors.RED +"Size" + listUsers.size());
-
                     userDataIO.writeDataUser(listUsers);
+                    ArrayList<User> abc = userDataIO.readDataUser();
+                    for (User user : abc) {
+                        System.out.println(user);
+                    }
                     break;
                 case 2:
                     if (!listPatients.isEmpty()) {
                         updateAPatient();
-                        userDataIO.writeDataUser(listUsers);
+                        new UserDataIO().writeDataUser(listUsers);
                     }
                     break;
             }
             break;
         }
     }
-
+    
     private void printMENU_AddUpdatePatient() {
         System.out.println(ConsoleColors.BLUE_BOLD + "-----------------------------------");
         System.out.println(ConsoleColors.BLUE_BOLD + "1\tAdd new a patient");
         System.out.println(ConsoleColors.BLUE_BOLD + "2\tUpdate a patient");
         System.out.println(ConsoleColors.BLUE_BOLD + "-----------------------------------");
     }
-
+    
     private void addNewPatient() throws IOException {
         while (true) {
             int patientid = validate.getINT_LIMIT("Enter patient id: ", 1, Integer.MAX_VALUE);
@@ -121,19 +120,19 @@ public class AdminController {
                 System.out.println("");
                 continue;
             }
-
+            
             String name = validate.getString("Enter name: ");
             String diseaseType = validate.getString("Enter diseaseType: ");
             Date consultDate = validate.getDate_LimitToCurrent("Enter consultDate: ");
             String consultNote = validate.getString("Enter consultNote: ");
-
+            
             listPatients.add(new Patient(patientid, name, diseaseType, consultDate, consultNote));
-
+            
             break;
         }
-
+        
     }
-
+    
     private void updateAPatient() throws IOException {
         while (true) {
             int patientid = validate.getINT_LIMIT("Enter patient id: ", 1, Integer.MAX_VALUE);
@@ -142,12 +141,12 @@ public class AdminController {
                 System.out.println(ConsoleColors.RED + "ID is not exist");
                 continue;
             }
-
+            
             String newName = validate.getString("Enter name: ");
             String newDiseaseType = validate.getString("Enter diseaseType: ");
             Date newConsultDate = validate.getDate_LimitToCurrent("Enter consultDate: ");
             String newConsultNote = validate.getString("Enter consultNote: ");
-
+            
             patient.setName(newName);
             patient.setDiseaseType(newDiseaseType);
             patient.setConsultDate(newConsultDate);
@@ -155,6 +154,10 @@ public class AdminController {
             break;
         }
     }
+
+    private void initMemoryData() {
+        listUsers = new ArrayList<>();
+        listPatients = new ArrayList<>();
+    }
     
-    /////updateskdfk
 }
