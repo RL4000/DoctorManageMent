@@ -9,22 +9,37 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class BasicInput {
+
     private static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     private static String userPrompt = "| Please enter again: ";
 
     public BasicInput() {
     }
+
     public BasicInput(String userPrompt) {
         this.userPrompt = userPrompt;
     }
-    
-    // Date = 2021/01/31
-    
+
+    // Date = 2021/02/01
 //<editor-fold defaultstate="collapsed" desc="String input">
     /**
-     * From keyboard reads and return a not null string
+     * From keyboard read a string
      * @return 
-     * A not null string
+     */
+    public static String getStringAllowNull() {
+        String result = null;
+        try {
+            result = in.readLine();
+        } catch (IOException ex) {
+            Logger.getLogger(BasicInput.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return result;
+    }
+
+    /**
+     * From keyboard reads and return a not null string
+     *
+     * @return A not null string
      */
     public static String getString() {
         String userString;
@@ -41,12 +56,13 @@ public final class BasicInput {
             }
         }
     }
+
     /**
      * From keyboard read a string that matches regex
+     *
      * @param regex
      * @param customMessage
-     * @return 
-     * A not null string matches regex
+     * @return A not null string matches regex
      */
     public static String getString(String regex, String customMessage) {
         String userString;
@@ -60,24 +76,25 @@ public final class BasicInput {
         }
     }
 //</editor-fold>
-    
+
 //<editor-fold defaultstate="collapsed" desc="Integer input">
     /**
      * From keyboard reads an integer
-     * @return 
-     * An integer
+     *
+     * @return An integer
      */
     public static int getInt() {
         int userInteger;
         userInteger = Integer.parseInt(getString("[\\+\\-]{0,1}([0-9])+", "Only enter integer number"));
         return userInteger;
     }
+
     /**
      * From keyboard reads an integer from min to max
+     *
      * @param min
      * @param max
-     * @return 
-     * An integer &gt;= min and &lt;= max
+     * @return An integer &gt;= min and &lt;= max
      */
     public static int getInt(int min, int max) {
         int userInteger;
@@ -90,18 +107,20 @@ public final class BasicInput {
             }
         }
     }
+
     /**
      * From keyboard enter an integer that's not in array
+     *
      * @param notAllow
-     * @return 
+     * @return
      */
-    public static int getIntNot (int[] notAllow) {
+    public static int getIntNot(int[] notAllow) {
         boolean valid;
         int userInteger;
         while (true) {
             valid = true;
             userInteger = getInt();
-            for (int i=0; i<notAllow.length; i++) {
+            for (int i = 0; i < notAllow.length; i++) {
                 if (userInteger == notAllow[i]) {
                     valid = false;
                     break;
@@ -111,7 +130,7 @@ public final class BasicInput {
                 return userInteger;
             } else {
                 System.out.printf("\tAny number but %d", notAllow[0]);
-                for (int i=1; i<notAllow.length; i++) {
+                for (int i = 1; i < notAllow.length; i++) {
                     System.out.printf(", %d", notAllow[i]);
                 }
                 System.out.printf(" %s", userPrompt);
@@ -119,24 +138,25 @@ public final class BasicInput {
         }
     }
 //</editor-fold>
-    
+
 //<editor-fold defaultstate="collapsed" desc="Double input">
     /**
      * From keyboard reads an double
-     * @return 
-     * An double
+     *
+     * @return An double
      */
     public static double getDouble() {
         double userDouble;
         userDouble = Double.parseDouble(getString("[\\-\\+]{0,1}([0-9])+(.([0-9])+){0,1}", "Only enter double number"));
         return userDouble;
     }
+
     /**
      * From keyboard reads an double from min to max
+     *
      * @param min
      * @param max
-     * @return 
-     * An double &gt;= min and &lt;= max
+     * @return An double &gt;= min and &lt;= max
      */
     public static double getDouble(double min, double max) {
         double userDouble;
@@ -149,18 +169,20 @@ public final class BasicInput {
             }
         }
     }
+
     /**
      * From keyboard enter an double that's not in array
+     *
      * @param notAllow
-     * @return 
+     * @return
      */
-    public static double getDoubleNot (int[] notAllow) {
+    public static double getDoubleNot(int[] notAllow) {
         boolean valid;
         double userDouble;
         while (true) {
             valid = true;
             userDouble = getDouble();
-            for (int i=0; i<notAllow.length; i++) {
+            for (int i = 0; i < notAllow.length; i++) {
                 if (userDouble == notAllow[i]) {
                     valid = false;
                     break;
@@ -170,7 +192,7 @@ public final class BasicInput {
                 return userDouble;
             } else {
                 System.out.printf("\tAny number but %f", notAllow[0]);
-                for (int i=1; i<notAllow.length; i++) {
+                for (int i = 1; i < notAllow.length; i++) {
                     System.out.printf(", %f", notAllow[i]);
                 }
                 System.out.printf(" %s", userPrompt);
@@ -189,7 +211,7 @@ public final class BasicInput {
         return choice.equalsIgnoreCase(yes + "");
     }
 //</editor-fold>
-    
+
 //<editor-fold defaultstate="collapsed" desc="LocalDateTime input">
     public static LocalDateTime getLocalDateTime() {
         LocalDateTime result;
@@ -203,6 +225,7 @@ public final class BasicInput {
             }
         }
     }
+
     public static LocalDateTime getLocalDateTime(LocalDateTime min, LocalDateTime max) {
         while (true) {
             LocalDateTime result = getLocalDateTime();
@@ -214,6 +237,6 @@ public final class BasicInput {
         }
     }
 //</editor-fold>
-    
+
     // Custom inputs
 }

@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
@@ -289,6 +291,28 @@ public final class Validate {
                 System.err.println("That day was not found");
             }
         }
+    }
+
+    public static Date getDate_LimitFromCurrent(String MSG) {
+        Date now = new Date();
+        while (true) {
+            String check = getString(MSG);
+            SimpleDateFormat fd = new SimpleDateFormat("dd/MM/yyyy");
+            fd.setLenient(false);
+            try {
+                Date date = fd.parse(check);
+                if (date.after(now)) {
+                    return date;
+                }
+                System.err.println("Enter \"Date\" type before " + fd.format(now));
+            } catch (ParseException e) {
+                System.err.println("That day was not found");
+            }
+        }
+    }
+
+    public static LocalDateTime toLocalDateTime(Date theDate) {
+        return LocalDateTime.ofInstant(theDate.toInstant(), ZoneId.systemDefault());
     }
 
     public static int getAge(Date birthDay) {

@@ -1,7 +1,9 @@
 package controller;
 
 import boundary.UserDataIO;
+import boundary.Validate;
 import entity.Role;
+import entity.Specialization;
 import entity.User;
 import java.util.ArrayList;
 import java.util.UUID;
@@ -27,7 +29,10 @@ public class UserManager extends BaseManager {
      * Load user list from file
      */
     public void loadUserList() {
-        userList = UserDataIO.readData();
+        ArrayList<User> tempList = UserDataIO.readData();
+        if (tempList != null) {
+            userList = tempList;
+        }
     }
 
     /**
@@ -44,13 +49,23 @@ public class UserManager extends BaseManager {
      * @return
      */
     public User getUser(String userCode) {
+        System.out.println((userList != null) ? "Not null" : "Null");
+        System.out.println("User list lenght " + userList.size());
+        System.out.println("Checking user code " + userCode);
+
         if (userList != null) {
             for (User theUser : userList) {
-                if (theUser.getUserCode().equals(userCode)) {
-                    return theUser;
+
+                if (theUser.getUserCode() != null) {
+                    if (theUser.getUserCode().equals(userCode)) {
+                        System.out.println("Found equal");
+                        return theUser;
+                    }
                 }
+
             }
         }
+
         return null;
     }
 
@@ -79,7 +94,36 @@ public class UserManager extends BaseManager {
         return true;
     }
 
+    private static Role selectRole() {
+        int count = 0;
+        for (Role currentRole : Role.values()) {
+            count++;
+            System.out.println(count + ". " + currentRole.name());
+        }
+        return Role.values()[Validate.getINT_LIMIT("Select role: ", 1, count) - 1];
+    }
+
     // ******************* Main methods *******************
+    /**
+     * Add user to user list
+     */
+    public void addUser() {
+        String userCode = Validate.getString("User code: ");
+        String userName = Validate.getUsername("User name: ");
+        String password = Validate.getPassword("Password: ");
+        Role role = selectRole();
+        addUser(userCode, userName, password, role);
+        System.out.println(message);
+    }
+
+    public void addUser(Role role) {
+        String userCode = Validate.getString("User code: ");
+        String userName = Validate.getUsername("User name: ");
+        String password = Validate.getPassword("Password: ");
+        addUser(userCode, userName, password, role);
+        System.out.println(message);
+    }
+
     /**
      * Them 1 user vao user list, tra lai user vua add
      *
@@ -89,20 +133,57 @@ public class UserManager extends BaseManager {
      * @param role
      * @return
      */
-    public User addUser(String userCode, String userName, String password, Role role) {
-        loadUserList();
+    public void addUser(String userCode, String userName, String password, Role role) {
+
         if (getUser(userCode) == null) { // Add new user
+
             String salt = UUID.randomUUID().toString();
+
             String passwordHash = UserDataIO.hashPassword(password, salt);
+
             User theNewUser = new User(userCode, userName, passwordHash, salt, role);
-            System.out.println(""+salt + passwordHash + role.name());
+
             userList.add(theNewUser);
             message = theNewUser.toString() + " added";
             saveUserList();
-            return theNewUser;
         } else { // User existed
+
             message = "There is already user code " + userCode + " in list";
-            return null;
+        }
+    }
+
+    public void updateUser(Role role) {
+        String userCode = Validate.getString("User code: ");
+        User toUpdate = getUser(userCode);
+        if (toUpdate.getRole() == role) {
+            if (toUpdate != null) {
+                if (Validate.getYesNo("Change user name? _")) {
+                    toUpdate.setUserName(Validate.getUsername("User name: "));
+                }
+                if (Validate.getYesNo("Change user role? _")) {
+                    toUpdate.setRole(selectRole());
+                }
+            } else {
+                System.out.println("User " + userCode + " not found");
+            }
+        } else {
+            System.out.println("You don't have permission to update this");
+        }
+
+    }
+
+    public void updateUser() {
+        String userCode = Validate.getString("User code: ");
+        User toUpdate = getUser(userCode);
+        if (toUpdate != null) {
+            if (Validate.getYesNo("Change user name? _")) {
+                toUpdate.setUserName(Validate.getUsername("User name: "));
+            }
+            if (Validate.getYesNo("Change user role? _")) {
+                toUpdate.setRole(selectRole());
+            }
+        } else {
+            System.out.println("User " + userCode + " not found");
         }
     }
 
@@ -114,23 +195,21 @@ public class UserManager extends BaseManager {
      * @param userUpdate
      */
     public void updateUser(String userCode, User userUpdate) {
-        loadUserList();
         User userToUpdate = getUser(userCode);
         // Check if user to update exists
         if (getUser(userCode) != null) {
             // Check for permission to update
-            if (loggedIn()) {
-                if (haveFullPermission(userCode)) {
-                    userToUpdate.setUserName(userUpdate.getUserName());
-                } else {
-                    message = "You do not have permission to do this";
-                }
-            } else {
-                message = "Log in to use this function";
-            }
+            userToUpdate.setUserName(userUpdate.getUserName());
+            saveUserList();
         } else {
             message = "User " + userCode + " not found";
         }
+    }
+
+    public void deleteUser() {
+        String userCode = Validate.getString("User code: ");
+        deleteUser(userCode);
+        saveUserList();
     }
 
     /**
@@ -139,16 +218,22 @@ public class UserManager extends BaseManager {
      * @param userCode
      */
     public void deleteUser(String userCode) {
-        if (loggedIn()) {
-            if (haveFullPermission(userCode)) {
-                loadUserList();
-                for (int i = 0; i < userList.size(); i++) {
-                    if (userList.get(i).getUserCode().equals(userCode)) {
-                        userList.remove(i);
-                    }
-                }
-                saveUserList();
+        for (int i = 0; i < userList.size(); i++) {
+            if (userList.get(i).getUserCode().equals(userCode)) {
+                userList.remove(i);
             }
+        }
+        saveUserList();
+    }
+
+    public void changePassword() {
+        String oldPassword = Validate.getString("Enter old password: ");
+        String newPassword = Validate.getString("Enter new password: ");
+        String againNewPassword = Validate.getString("Enter new password again: ");
+        if (newPassword.equals(againNewPassword)) {
+            changePassword(newPassword, oldPassword);
+        } else {
+            System.out.println("New password second time enter not match");
         }
     }
 
@@ -183,14 +268,15 @@ public class UserManager extends BaseManager {
      * @return
      */
     public boolean login(String userName, String password) {
-        loadUserList();
         for (User theUser : userList) {
-            if (theUser.getUserName().equals(userName) && UserDataIO.verifyPassword(password, theUser.getSalt(), theUser.getPasswordHash())) {
-                currentUser = theUser;
-                message = "Logged in as " + userName;
-                return true;
-            } else {
-                message = "Incorrect user name or password";
+            if (theUser.getUserCode() != null) {
+                if (theUser.getUserCode().equals(userName) && UserDataIO.verifyPassword(password, theUser.getSalt(), theUser.getPasswordHash())) {
+                    currentUser = theUser;
+                    message = "Logged in as " + userName;
+                    return true;
+                } else {
+                    message = "Incorrect user name or password";
+                }
             }
         }
         return false;
@@ -234,18 +320,22 @@ public class UserManager extends BaseManager {
      * Print out user list. Only admin can.
      */
     public void printUserList() {
-        if (currentUser != null) {
-            if (currentUser.getRole() == Role.ADMIN) {
-                int count = 1;
-                for (User user : userList) {
-                    System.out.printf("%d. %s\n", count, user.toString());
-                    count++;
-                }
-            } else {
-                System.out.printf("Only admin can view user list\n");
+        System.out.println("User list:");
+        int count = 1;
+        for (User user : userList) {
+            System.out.printf("%d. %s\n", count, user.toString());
+            count++;
+        }
+        System.out.println("---------");
+    }
+
+    public void printUserList(Role theRole) {
+        int count = 1;
+        for (User user : userList) {
+            if (user.getRole() == theRole) {
+                System.out.printf("%d. %s\n", count, user.toString());
+                count++;
             }
-        } else {
-            System.out.printf("Log in to use this function\n");
         }
     }
 }

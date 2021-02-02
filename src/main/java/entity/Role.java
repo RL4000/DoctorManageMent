@@ -10,7 +10,7 @@ package entity;
  * @author shado
  */
 public enum Role {
-    USER,
+    NORMAL_USER,
     ADMIN,
     DOCTOR,
 }

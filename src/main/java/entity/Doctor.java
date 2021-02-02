@@ -41,6 +41,11 @@ public class Doctor extends User{
         this.avaliability = avaliability;
     }
 
+    @Override
+    public String toString() {
+        return "Doctor{" + "doctorCode=" + doctorCode + ", specialization=" + specialization + ", avaliability=" + avaliability + '}';
+    }
+
     
     
     

@@ -53,7 +53,7 @@ public final class UserDataIO {
      */
     public static void writeData(List<User> users) {
         try {
-            FileOutputStream fos = new FileOutputStream(USER_SAVE_FILE_NAME);
+            FileOutputStream fos = new FileOutputStream(USER_SAVE_FILE_NAME, false);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(users);
             oos.close();

@@ -2,6 +2,7 @@ package controller;
 
 import boundary.ConsultDataIO;
 import boundary.UserDataIO;
+import boundary.Validate;
 import entity.Consult;
 import entity.Doctor;
 import entity.Role;
@@ -75,29 +76,23 @@ public class ConsultManager extends BaseManager {
      * @param consultTime
      * @param note
      */
-    public void addConsult(int consultID, Doctor doctor, User patient, Specialization diseaseType, LocalDateTime consultTime, String note) {
-        if (adminOrInvolvedDoctor(doctor)) {
-            consultList.add(
-                    new Consult(
-                            getLastConsultID() + 1,
-                            doctor, patient, diseaseType, consultTime, note));
-        }
+    public void addConsult(Doctor doctor, User patient, Specialization diseaseType, LocalDateTime consultTime, String note) {
+        consultList.add(
+                new Consult(
+                        getLastConsultID() + 1,
+                        doctor, patient, diseaseType, consultTime, note));
     }
 
     public void updateConsult(int consultID, Consult consultUpdate) {
         Consult toUpdate = getConsult(consultID);
         if (toUpdate != null) {
-            if (adminOrInvolvedDoctor(toUpdate.getDoctor())) {
-                toUpdate.setConsultTime(consultUpdate.getConsultTime());
-                toUpdate.setDiseaseType(consultUpdate.getDiseaseType());
-                if (currentUser.getRole() == Role.ADMIN) {
-                    toUpdate.setDoctor(consultUpdate.getDoctor());
-                    toUpdate.setPatient(consultUpdate.getPatient());
-                }
-                toUpdate.setNote(consultUpdate.getNote());
-            } else {
-                message = "You don't have permission to do";
+            toUpdate.setConsultTime(consultUpdate.getConsultTime());
+            toUpdate.setDiseaseType(consultUpdate.getDiseaseType());
+            if (currentUser.getRole() == Role.ADMIN) {
+                toUpdate.setDoctor(consultUpdate.getDoctor());
+                toUpdate.setPatient(consultUpdate.getPatient());
             }
+            toUpdate.setNote(consultUpdate.getNote());
         } else {
             message = "Consult " + consultID + " not found";
         }
@@ -123,7 +118,9 @@ public class ConsultManager extends BaseManager {
     public void sortByDiseaseType() {
         consultList.sort(new sortByDiseaseType());
     }
-    // ******************* Print methods *******************
+    // ***************************************************
+    //     Print methods
+    // ***************************************************
 
     public void printConsultLists() {
         if (consultList.size() > 0) {
@@ -151,18 +148,27 @@ public class ConsultManager extends BaseManager {
         }
     }
 
+    public void printPatientList(Doctor doctor) {
+        System.out.println(doctor.toString());
+        if (consultList.size() > 0) {
+            for (Consult currentConsult : consultList) {
+                if (currentConsult.getDoctor().equals(doctor)) {
+                    System.out.printf("%s\n", currentConsult.getPatient().toString());
+                }
+            }
+        }
+    }
+
     public void printUserByDiseaseType() {
         if (consultList.size() > 0) {
             if (loggedIn()) {
-                if (currentUser.getRole() == Role.ADMIN) {
-                    Specialization currentSpecialization = consultList.get(0).getDiseaseType();
-                    System.out.printf("%s\n", currentSpecialization.name());
-                    for (Consult currentConsult : consultList) {
-                        if (currentSpecialization != currentConsult.getDiseaseType()) {
-                            System.out.printf("%s\n", currentSpecialization.name());
-                        }
-                        System.out.printf("\t%s\n", currentConsult.getPatient().toString());
+                Specialization currentSpecialization = consultList.get(0).getDiseaseType();
+                System.out.printf("%s\n", currentSpecialization.name());
+                for (Consult currentConsult : consultList) {
+                    if (currentSpecialization != currentConsult.getDiseaseType()) {
+                        System.out.printf("%s\n", currentSpecialization.name());
                     }
+                    System.out.printf("\t%s\n", currentConsult.getPatient().toString());
                 }
             }
         }
