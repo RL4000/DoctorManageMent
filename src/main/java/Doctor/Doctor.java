@@ -8,6 +8,7 @@ package Doctor;
 import Common.ConsoleColors;
 import Common.Patient;
 import Common.UserRole;
+import Consult.Specialization;
 import User.User;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ public class Doctor extends User implements Serializable {
 
     private int doctorId;
     private String name;
-    private String specialization;
+    private Specialization specialization;
     private Date availability; //
     private ArrayList<Patient> patients;
 
@@ -45,13 +46,15 @@ public class Doctor extends User implements Serializable {
         this.doctorId = doctorId;
     }
 
-    public String getSpecialization() {
+    public Specialization getSpecialization() {
         return specialization;
     }
 
-    public void setSpecialization(String specialization) {
+    public void setSpecialization(Specialization specialization) {
         this.specialization = specialization;
     }
+
+    
 
     public Date getAvailability() {
         return availability;

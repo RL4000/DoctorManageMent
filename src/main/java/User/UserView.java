@@ -7,6 +7,7 @@ package User;
 
 import Admin.Admin;
 import Common.UserRole;
+import Consult.Specialization;
 import Doctor.Doctor;
 import Utilities.UserDataIO;
 import Utilities.Validate;
@@ -37,6 +38,15 @@ public class UserView {
         }
 
         return userView;
+    }
+    
+    public Specialization selectSpecialization() {
+        int count = 0;
+        for (Specialization currentSpecialization : Specialization.values()) {
+            count++;
+            System.out.println(count + ". " + currentSpecialization.name());
+        }
+        return Specialization.values()[boundary.Validate.getINT_LIMIT("Select specialization: ", 1, count) - 1];
     }
 
     public ArrayList<User> getUsers() {
@@ -111,7 +121,7 @@ public class UserView {
         int choice;
         try {
             System.out.println("what account you want to create\n" + "1.Admin\n" + "2.Authorized_Doctor\n"
-                    + "3.Doctor\n" + "4.NormalUserWithNotThingSpecialOtherThenChangePassword\n" + "0.Cancel");
+                    + "3.Doctor\n" + "4.NormalUserWithNotThingSpecialOtherThanChangePassword\n" + "0.Cancel");
             choice = validate.getINT_LIMIT("Your choice: ", 0, 4);
             if (choice == 0) {
                 return;
@@ -132,7 +142,7 @@ public class UserView {
                     Doctor newAuthDoctor = new Doctor(UserCode, UserName, password, UserRole.AUTHORIZED_DOCTOR);
                     newAuthDoctor.setDoctorId(AuthDocID);
                     System.out.print(askDoctorSpecialization);
-                    newAuthDoctor.setSpecialization(in.nextLine());
+                    newAuthDoctor.setSpecialization(selectSpecialization());
                     newAuthDoctor.setAvailability(validate.getDate_LimitToCurrent(askDoctorAvailability));
                     addUser(newAuthDoctor);
                     break;
@@ -142,7 +152,7 @@ public class UserView {
                     Doctor newDoctor = new Doctor(UserCode, UserName, null, UserRole.DOCTOR);
                     newDoctor.setDoctorId(docID);
                     System.out.print(askDoctorSpecialization);
-                    newDoctor.setSpecialization(in.nextLine());
+                    newDoctor.setSpecialization(selectSpecialization());
                     newDoctor.setAvailability(validate.getDate_LimitToCurrent(askDoctorAvailability));
                     addUser(newDoctor);
                     break;
