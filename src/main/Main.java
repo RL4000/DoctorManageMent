@@ -7,7 +7,7 @@ package main;
  */
 import boundary.BasicInput;
 import boundary.ConsoleColors;
-import boundary.UserDataIO;
+import boundary.DataIO;
 import boundary.Validate;
 import controller.ConsultManager;
 import controller.DoctorManager;
@@ -47,7 +47,7 @@ public class Main {
         int userChoice;
         exit = false;
         while (!exit) {
-            if (!testUserManager.loggedIn()) { // Not logged in
+            if (testUserManager.getCurrentUser() == null) { // Not logged in
                 printLoginMenu();
                 System.out.printf("Choose: _");
                 userChoice = BasicInput.getInt(0, 1);
@@ -74,7 +74,7 @@ public class Main {
                         // Add, update patient information of a specific doctor
                         // Query doctor information, including patient status
                         // Log in, log out, change password
-
+                        functionsForDoctor();
                         break;
                     }
                     case NORMAL_USER: {
@@ -85,7 +85,7 @@ public class Main {
                         // View list, add, update, delete user
                         // Query & print of the patients grouped by disease type
                         // Log in, log out, change password
-
+                        functionsForUsers();
                         break;
                     }
                 }
@@ -134,11 +134,43 @@ public class Main {
     }
 
     private static void functionsForDoctor() {
-
+        printDoctorMenu();
+        System.out.printf("Choose: _");
+        int choice = BasicInput.getInt(1, 7);
+        switch (choice) {
+            case 1: { // Add, update patient information of a specific doctor
+                functionBlock2();
+                break;
+            }
+            case 2: { // Query doctor information, including patient status
+                functionBlock3Doctor();
+                break;
+            }
+            case 3: { // Log in, log out, change password
+                functionBlock6();
+                break;
+            }
+            case 4: { // Exit
+                exit = true;
+                break;
+            }
+        }
     }
 
     private static void functionsForUsers() {
-
+        printNormalUserMenu();
+        System.out.printf("Choose: _");
+        int choice = BasicInput.getInt(1, 7);
+        switch (choice) {
+            case 1: { // Log in, log out, change password
+                functionBlock6();
+                break;
+            }
+            case 2: { // Exit
+                exit = true;
+                break;
+            }
+        }
     }
 
     // BY BLOCKS
@@ -199,7 +231,7 @@ public class Main {
                 break;
             }
             case 3: { // Update patient
-                
+
                 break;
             }
             case 4: { // Delete patient
@@ -285,13 +317,17 @@ public class Main {
         System.out.println(ConsoleColors.BLUE_BOLD + "DOCTOR PANEL");
         System.out.println(ConsoleColors.BLUE_BOLD + "1. Add/Update Patient info");
         System.out.println(ConsoleColors.BLUE_BOLD + "2. View Doctor info incl. Patient info");
-        System.out.println(ConsoleColors.BLUE_BOLD + "3. Change password");
-        System.out.println(ConsoleColors.BLUE_BOLD + "4. Log out");
+        System.out.println(ConsoleColors.BLUE_BOLD + "3. Change password, log out");
+        System.out.println(ConsoleColors.BLUE_BOLD + "4. Exit");
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
     }
 
     private static void printNormalUserMenu() {
-
+        System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
+        System.out.println(ConsoleColors.BLUE_BOLD + "NORMAL USER PANEL");
+        System.out.println(ConsoleColors.BLUE_BOLD + "1. Change password, log out");
+        System.out.println(ConsoleColors.BLUE_BOLD + "2. Exit");
+        System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
     }
 
     // FUNCTION BLOCK MENUS

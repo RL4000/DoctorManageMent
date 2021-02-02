@@ -1,16 +1,19 @@
 package controller;
 
-import boundary.UserDataIO;
+import boundary.DataIO;
 import boundary.Validate;
 import entity.Role;
-import entity.Specialization;
 import entity.User;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.UUID;
 
 public class UserManager extends BaseManager {
 
     protected ArrayList<User> userList;
+    protected DataIO<User> dataIO = new DataIO<>("users.dat");
 
     public UserManager() {
         this.userList = new ArrayList<>();
@@ -24,12 +27,15 @@ public class UserManager extends BaseManager {
         return userList;
     }
 
-    // ******************* Helper methods *******************
+    // ***************************************************
+    //     Helper methods
+    // ***************************************************
+    
     /**
      * Load user list from file
      */
     public void loadUserList() {
-        ArrayList<User> tempList = UserDataIO.readData();
+        ArrayList<User> tempList = dataIO.readData();
         if (tempList != null) {
             userList = tempList;
         }
@@ -39,7 +45,7 @@ public class UserManager extends BaseManager {
      * Save user list to file
      */
     public void saveUserList() {
-        UserDataIO.writeData(userList);
+        dataIO.writeData(userList);
     }
 
     /**
@@ -103,7 +109,40 @@ public class UserManager extends BaseManager {
         return Role.values()[Validate.getINT_LIMIT("Select role: ", 1, count) - 1];
     }
 
-    // ******************* Main methods *******************
+    // ***************************************************
+    //     Main methods
+    // ***************************************************
+     /**
+     * Check if hash-ed string match.
+     *
+     * @param userPassword
+     * @param passwordHash
+     * @param salt
+     * @return Match: true | Not match: false
+     */
+    public static boolean verifyPassword(String userPassword, String salt, String passwordHash) {
+        return hashPassword(userPassword, salt).equals(passwordHash);
+    }
+
+    /**
+     * Part of login function, use to hash password.
+     *
+     * @param userPassword
+     * @param salt
+     * @return hashed password string
+     */
+    public static String hashPassword(String userPassword, String salt) {
+        String result = null;
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update((userPassword + salt).getBytes());
+            byte[] bytesResult = md.digest();
+            result = String.format("%064x", new BigInteger(1, bytesResult));
+        } catch (NoSuchAlgorithmException ex) {
+        }
+        return result;
+    }
+    
     /**
      * Add user to user list
      */
@@ -139,7 +178,7 @@ public class UserManager extends BaseManager {
 
             String salt = UUID.randomUUID().toString();
 
-            String passwordHash = UserDataIO.hashPassword(password, salt);
+            String passwordHash = hashPassword(password, salt);
 
             User theNewUser = new User(userCode, userName, passwordHash, salt, role);
 
@@ -245,10 +284,10 @@ public class UserManager extends BaseManager {
      * @param oldPasword
      */
     public void changePassword(String newPassword, String oldPasword) {
-        if (loggedIn()) {
-            if (UserDataIO.verifyPassword(oldPasword, currentUser.getSalt(), currentUser.getPasswordHash())) { // Confirm old password
+      
+            if (verifyPassword(oldPasword, currentUser.getSalt(), currentUser.getPasswordHash())) { // Confirm old password
                 String salt = UUID.randomUUID().toString();
-                String passwordHash = UserDataIO.hashPassword(newPassword, salt);
+                String passwordHash = hashPassword(newPassword, salt);
                 currentUser.setSalt(salt);
                 currentUser.setPasswordHash(passwordHash);
                 saveUserList();
@@ -256,7 +295,7 @@ public class UserManager extends BaseManager {
             } else {
                 message = "Old password incorrect";
             }
-        }
+    
     }
 
     /**
@@ -267,19 +306,17 @@ public class UserManager extends BaseManager {
      * @param password
      * @return
      */
-    public boolean login(String userName, String password) {
+    public void login(String userName, String password) {
         for (User theUser : userList) {
             if (theUser.getUserCode() != null) {
-                if (theUser.getUserCode().equals(userName) && UserDataIO.verifyPassword(password, theUser.getSalt(), theUser.getPasswordHash())) {
+                if (theUser.getUserCode().equals(userName) && verifyPassword(password, theUser.getSalt(), theUser.getPasswordHash())) {
                     currentUser = theUser;
                     message = "Logged in as " + userName;
-                    return true;
                 } else {
                     message = "Incorrect user name or password";
                 }
             }
         }
-        return false;
     }
 
     /**
@@ -305,17 +342,20 @@ public class UserManager extends BaseManager {
             theUser.setRole(theRole);
             String salt = UUID.randomUUID().toString();
             theUser.setSalt(salt);
-            String passwordHash = UserDataIO.hashPassword(password, salt);
+            String passwordHash = hashPassword(password, salt);
             theUser.setPasswordHash(passwordHash);
             userList.add(theUser);
             message = "User code created";
-            UserDataIO.writeData(userList);
+            dataIO.writeData(userList);
         } else {
             message = "Can not add duplicate user code";
         }
     }
 
-    // ************ PRINT METHODS ************
+    // ***************************************************
+    //     Print methods
+    // ***************************************************
+    
     /**
      * Print out user list. Only admin can.
      */

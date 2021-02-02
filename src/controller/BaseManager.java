@@ -25,14 +25,5 @@ public abstract class BaseManager {
     }
     
     // ******************* Helper methods *******************
-    public boolean loggedIn() {
-        return currentUser != null;
-    }
-    protected boolean haveFullPermission(String userCode) {
-        return ((loggedIn()) && ((currentUser.getRole() == Role.ADMIN) || (currentUser.getUserCode().equals(userCode))));
-    }
-    protected boolean adminOrInvolvedDoctor(Doctor theDoctor) {
-        return ((loggedIn()) && ((currentUser.getRole() == Role.ADMIN) || (theDoctor.equals(currentUser))));
-    }
 }
 

@@ -1,8 +1,5 @@
 package controller;
 
-import boundary.UserDataIO;
-import controller.UserManager;
-import static boundary.UserDataIO.readData;
 import boundary.Validate;
 import entity.Doctor;
 import entity.Role;
@@ -10,13 +7,12 @@ import entity.Specialization;
 import entity.User;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
 import java.util.UUID;
 
 public class DoctorManager extends UserManager {
 
     public DoctorManager() {
-
+        super();
     }
 
     // ***************************************************
@@ -74,7 +70,7 @@ public class DoctorManager extends UserManager {
 
     public void addDoctor(String userCode, String userName, String password, Specialization specialization, LocalDateTime avaliability) {
         String salt = UUID.randomUUID().toString();
-        String passwordHash = UserDataIO.hashPassword(password, salt);
+        String passwordHash = hashPassword(password, salt);
         Doctor doctorAdded = new Doctor(getLastDoctorID() + 1, specialization, avaliability, userCode, userName, passwordHash, salt, Role.DOCTOR);
         userList.add(doctorAdded);
         System.out.printf("%s\n", doctorAdded.toString() + " added");

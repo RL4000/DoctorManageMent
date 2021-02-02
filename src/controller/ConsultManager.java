@@ -1,7 +1,6 @@
 package controller;
 
-import boundary.ConsultDataIO;
-import boundary.UserDataIO;
+import boundary.DataIO;
 import boundary.Validate;
 import entity.Consult;
 import entity.Doctor;
@@ -14,10 +13,11 @@ import java.util.Comparator;
 
 public class ConsultManager extends BaseManager {
 
+    private DataIO<Consult> dataIO = new DataIO<>("consults.dat");
     private ArrayList<Consult> consultList;
 
     public ConsultManager() {
-        this.consultList = new ArrayList<>();
+        this.consultList = dataIO.readData();
     }
 
     public ArrayList<Consult> getConsultList() {
@@ -28,15 +28,15 @@ public class ConsultManager extends BaseManager {
     /**
      * Load user list from file
      */
-    public void loadUserList() {
-        consultList = ConsultDataIO.readData();
+    public void loadConsultList() {
+        consultList = dataIO.readData();
     }
 
     /**
      * Save user list to file
      */
-    public void saveUserList() {
-        ConsultDataIO.writeData(consultList);
+    public void saveConsultList() {
+        dataIO.writeData(consultList);
     }
 
     /**
@@ -52,6 +52,12 @@ public class ConsultManager extends BaseManager {
         }
     }
 
+    /**
+     * Get consult from consult list
+     *
+     * @param consultID
+     * @return
+     */
     public Consult getConsult(int consultID) {
         for (Consult consult : consultList) {
             if (consult.getConsultID() == consultID) {
@@ -61,7 +67,7 @@ public class ConsultManager extends BaseManager {
         return null;
     }
 
-    public Consult getUser(Consult consult) {
+    public Consult getConsult(Consult consult) {
         return getConsult(consult.getConsultID());
     }
 
@@ -81,6 +87,16 @@ public class ConsultManager extends BaseManager {
                 new Consult(
                         getLastConsultID() + 1,
                         doctor, patient, diseaseType, consultTime, note));
+        saveConsultList();
+    }
+
+    public void updateConsult() {
+        Consult toUpdate = getConsult(Validate.getINT("Consult ID: "));
+        if (toUpdate != null) {
+            toUpdate.setConsultTime(Validate.toLocalDateTime(Validate.getDate("Consult time: ")));
+            toUpdate.setDiseaseType(Specialization.TIEU_HOA);
+        }
+        saveConsultList();
     }
 
     public void updateConsult(int consultID, Consult consultUpdate) {
@@ -96,6 +112,7 @@ public class ConsultManager extends BaseManager {
         } else {
             message = "Consult " + consultID + " not found";
         }
+        saveConsultList();
     }
 
     /**
@@ -124,27 +141,27 @@ public class ConsultManager extends BaseManager {
 
     public void printConsultLists() {
         if (consultList.size() > 0) {
-            if (loggedIn()) {
-                if (currentUser.getRole() == Role.ADMIN) {
-                    for (Consult currentConsult : consultList) {
-                        System.out.printf("%s\n", currentConsult.toString());
-                    }
+
+            if (currentUser.getRole() == Role.ADMIN) {
+                for (Consult currentConsult : consultList) {
+                    System.out.printf("%s\n", currentConsult.toString());
                 }
             }
+
         }
     }
 
     public void printConsultLists(Doctor doctor) {
         if (consultList.size() > 0) {
-            if (loggedIn()) {
-                if (currentUser.getRole() == Role.ADMIN) {
-                    for (Consult currentConsult : consultList) {
-                        if (currentConsult.getDoctor().equals(doctor)) {
-                            System.out.printf("%s\n", currentConsult.toString());
-                        }
+
+            if (currentUser.getRole() == Role.ADMIN) {
+                for (Consult currentConsult : consultList) {
+                    if (currentConsult.getDoctor().equals(doctor)) {
+                        System.out.printf("%s\n", currentConsult.toString());
                     }
                 }
             }
+
         }
     }
 
@@ -161,16 +178,16 @@ public class ConsultManager extends BaseManager {
 
     public void printUserByDiseaseType() {
         if (consultList.size() > 0) {
-            if (loggedIn()) {
-                Specialization currentSpecialization = consultList.get(0).getDiseaseType();
-                System.out.printf("%s\n", currentSpecialization.name());
-                for (Consult currentConsult : consultList) {
-                    if (currentSpecialization != currentConsult.getDiseaseType()) {
-                        System.out.printf("%s\n", currentSpecialization.name());
-                    }
-                    System.out.printf("\t%s\n", currentConsult.getPatient().toString());
+
+            Specialization currentSpecialization = consultList.get(0).getDiseaseType();
+            System.out.printf("%s\n", currentSpecialization.name());
+            for (Consult currentConsult : consultList) {
+                if (currentSpecialization != currentConsult.getDiseaseType()) {
+                    System.out.printf("%s\n", currentSpecialization.name());
                 }
+                System.out.printf("\t%s\n", currentConsult.getPatient().toString());
             }
+
         }
     }
 }
