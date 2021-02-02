@@ -5,13 +5,16 @@
  */
 package Common;
 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
  *
  * @author Admin
  */
-public class Patient {
+public class Patient implements Serializable {
+
     private int patientId;
     private String name;
     private String diseaseType;
@@ -68,7 +71,9 @@ public class Patient {
     public void setConsultNote(String consultNote) {
         this.consultNote = consultNote;
     }
-    
-    
-    
+
+    public String toString(SimpleDateFormat dateFormat) {
+        return String.format("%-10s|%-15s|%-15s|%-15s|%-15s", patientId, name, diseaseType, dateFormat.format(consultDate), consultNote);
+    }
+
 }

@@ -16,10 +16,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Admin
- */
 public class UserDataIO {
 
     public UserDataIO() {
@@ -61,6 +57,22 @@ public class UserDataIO {
             } catch (IOException ex) {
                 Logger.getLogger(UserDataIO.class.getName()).log(Level.SEVERE, null, ex);
             }
+    public ArrayList<User> readDataUser() {
+        try {
+            try (ObjectInputStream in = new ObjectInputStream(new FileInputStream("users.dat"))) {
+                return (ArrayList<User>) in.readObject();
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public void writeDataUser(ArrayList<User> users) {
+        try {
+            try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("users.dat"))) {
+                oos.writeObject(users);
+            }
+        } catch (IOException e) {
         }
     }
 

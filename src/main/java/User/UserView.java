@@ -27,7 +27,7 @@ public class UserView {
     public static UserView userView = null;
 
     public UserView() {
-        users = new ArrayList<User>();
+        users = new ArrayList<>();
         userDataIO = new UserDataIO();
     }
 
@@ -40,13 +40,14 @@ public class UserView {
     }
 
     public ArrayList<User> getUsers() {
-        return userDataIO.readData();
+        return userDataIO.readDataUser();
     }
 
     public void addUser(User user) {
         users = userDataIO.readData();
+        users = userDataIO.readDataUser();
         users.add(user);
-        userDataIO.writeData(users);
+        userDataIO.writeDataUser(users);
     }
 
     public void deleteUser(String userCode) {
@@ -63,6 +64,18 @@ public class UserView {
     public void updateUser(User userUpdate) {
         users = userDataIO.readData();
         for (User u : users) {
+        users = userDataIO.readDataUser();
+        users.forEach((u) -> {
+            if (u.getUserCode().equalsIgnoreCase(userCode)) {
+                users.remove(u);
+            }
+        });
+        userDataIO.writeDataUser(users);
+    }
+
+    public void updateUser(User userUpdate) {
+        users = userDataIO.readDataUser();
+        users.forEach((u) -> {
             if (u.getUserCode().equalsIgnoreCase(userUpdate.getUserCode())) {
                 u.setUserName(userUpdate.getUserName());
                 u.setPassword(userUpdate.getPassword());
@@ -91,8 +104,7 @@ public class UserView {
     public int getDoctorHighestID() {
         int id = 0;
         for (User u : users) {
-            if (u.getUserRole().equals(UserRole.DOCTOR)
-                    || u.getUserRole().equals(UserRole.AUTHORIZED_DOCTOR)) {
+            if (u.getUserRole().equals(UserRole.DOCTOR) || u.getUserRole().equals(UserRole.AUTHORIZED_DOCTOR)) {
                 int checkID = ((Doctor) u).getDoctorId();
                 if (checkID > id) {
                     id = checkID + 1;
@@ -102,7 +114,7 @@ public class UserView {
         return id;
     }
 
-    //function4.2
+    // function4.2
     public void inputNewUser() {
         users = getUsers();
         String askPass = "Type in your Password: ";
@@ -111,12 +123,8 @@ public class UserView {
         String askDoctorAvailability = "Enter availability: ";
         int choice;
         try {
-            System.out.println("what account you want to create\n"
-                    + "1.Admin\n"
-                    + "2.Authorized_Doctor\n"
-                    + "3.Doctor\n"
-                    + "4.NormalUserWithNotThingSpecialOtherThenChangePassword\n"
-                    + "0.Cancel");
+            System.out.println("what account you want to create\n" + "1.Admin\n" + "2.Authorized_Doctor\n"
+                    + "3.Doctor\n" + "4.NormalUserWithNotThingSpecialOtherThenChangePassword\n" + "0.Cancel");
             choice = validate.getINT_LIMIT("Your choice: ", 0, 4);
             if (choice == 0) {
                 return;
@@ -183,7 +191,7 @@ public class UserView {
         return updateMe;
     }
 
-    //function4.3
+    // function4.3
     public void findAndUpdateByUserCode() throws IOException {
         users = getUsers();
         while (true) {
@@ -201,7 +209,7 @@ public class UserView {
         }
     }
 
-    //function4.4
+    // function4.4
     public void findAndDeletedByUserCode() throws IOException {
         users = getUsers();
         String code = validate.getUsername("Enter usercode needed to be deleted: ");
@@ -211,14 +219,9 @@ public class UserView {
     public void doFunction4() throws IOException {
         int choice = 1;
         while (true) {
-            System.out.println("--------------------------------\n"
-                    + "Option 4 pls choose what you want to do\n"
-                    + " 1. view list of all user\n"
-                    + " 2. add user\n"
-                    + " 3. update user\n"
-                    + " 4. deleted user\n"
-                    + " 0. Back to main menu\n"
-                    + "--------------------------------");
+            System.out.println("--------------------------------\n" + "Option 4 pls choose what you want to do\n"
+                    + " 1. view list of all user\n" + " 2. add user\n" + " 3. update user\n" + " 4. deleted user\n"
+                    + " 0. Back to main menu\n" + "--------------------------------");
             choice = validate.getINT_LIMIT("Choose: ", 0, 4);
             switch (choice) {
                 case 1:
@@ -244,5 +247,9 @@ public class UserView {
                     break;
             }
         }
+
+        userDataIO.writeDataUser(users);}
     }
+};
+
 }
