@@ -10,6 +10,7 @@ package Common;
  * @author Admin
  */
 public class ConsoleColors {
+
     // Reset
     public static final String RESET = "\033[0m";  // Text Reset
 
@@ -82,4 +83,13 @@ public class ConsoleColors {
     public static final String PURPLE_BACKGROUND_BRIGHT = "\033[0;105m"; // PURPLE
     public static final String CYAN_BACKGROUND_BRIGHT = "\033[0;106m";  // CYAN
     public static final String WHITE_BACKGROUND_BRIGHT = "\033[0;107m";   // WHITE
+
+    public static void main(String[] args) {
+        System.out.println(ConsoleColors.BLUE + "anhtu");
+        System.out.println(ConsoleColors.BLUE_BACKGROUND + "anhtu");
+        System.out.println(ConsoleColors.BLUE_BRIGHT + "anhtu");
+        System.out.println(ConsoleColors.BLUE_UNDERLINED + "anhtu");
+        System.out.println(ConsoleColors.PURPLE + "anhtu");
+
+    }
 }

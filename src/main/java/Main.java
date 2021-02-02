@@ -136,7 +136,6 @@ public class Main {
             try {
                 printAdminMenu();
                 choice = validate.getINT_LIMIT("Your choice: ", 1, 7);
-
                 switch (choice) {
                     case 1:
                         break;

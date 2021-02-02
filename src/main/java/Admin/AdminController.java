@@ -30,7 +30,7 @@ public class AdminController {
     ArrayList<User> listUsers;
     ArrayList<Patient> listPatients;
     Doctor doctorGotByUserCode;
-    
+
     SimpleDateFormat dateFormat;
 
     public AdminController() {
@@ -48,17 +48,19 @@ public class AdminController {
             listUsers = userDataIO.readDataUser();
 
             System.out.println(ConsoleColors.BLUE_BOLD + "LIST DOCTOR");
+            System.out.println(String.format("%-10s|%-20s", "USERCODE", "NAME"));
             for (User user : listUsers) {
                 if (user.getUserRole() == UserRole.AUTHORIZED_DOCTOR) {
                     System.out.println(user);
                 }
             }
+            System.out.println("");
 
             while (true) {
                 String usercode = validate.getString("Enter usercode: ");
                 doctorGotByUserCode = (Doctor) adminManager.getDoctorByUserCode(usercode, listUsers);
                 if (doctorGotByUserCode == null) {
-                    System.err.println("This usercode does not exist,  enter a new usercode ");
+                    System.out.println(ConsoleColors.RED + "This usercode does not exist,  enter a new usercode ");
                 } else {
                     break;
                 }
@@ -70,7 +72,7 @@ public class AdminController {
                 System.out.println(ConsoleColors.RED + "List patient's this doctor is emty");
             } else {
                 System.out.println(ConsoleColors.BLUE_BOLD + "LIST PATIENT");
-                System.out.println(String.format("%-10s|%-20s|%-20s|%-20s|%-20s", "ID", "NAME", "DESEASE TYPE", "CONSULT DATE", "CONSULT NOTE"));
+                System.out.println(String.format("%-10s|%-15s|%-15s|%-15s|%-15s", "ID", "NAME", "DESEASE TYPE", "CONSULT DATE", "CONSULT NOTE"));
                 listPatients.forEach((patient) -> {
                     System.out.println(patient.toString(dateFormat));
                 });
@@ -99,8 +101,8 @@ public class AdminController {
 
     private void printMENU_AddUpdatePatient() {
         System.out.println(ConsoleColors.BLUE_BOLD + "-----------------------------------");
-        System.out.println(ConsoleColors.BLUE_BOLD + "1\tAdd new a patient");
-        System.out.println(ConsoleColors.BLUE_BOLD + "2\tUpdate a patient");
+        System.out.println(ConsoleColors.BLUE_BOLD + "1. Add new a patient");
+        System.out.println(ConsoleColors.BLUE_BOLD + "2. Update a patient");
         System.out.println(ConsoleColors.BLUE_BOLD + "-----------------------------------");
     }
 

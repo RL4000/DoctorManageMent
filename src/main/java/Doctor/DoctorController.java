@@ -12,6 +12,7 @@ import User.User;
 import Utilities.UserDataIO;
 import Utilities.Validate;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -28,11 +29,13 @@ public class DoctorController {
     ArrayList<User> listUsers;
     ArrayList<Patient> listPatients;
     Doctor doctorGotByUserCode;
+    SimpleDateFormat dateFormat;
 
     public DoctorController() {
         validate = new Validate();
         validationAdminManager = new ValidationAdminManager();
         userDataIO = new UserDataIO();
+        dateFormat = new SimpleDateFormat("dd/MMM/yyyy");
         initMemoryData();
     }
 
@@ -43,11 +46,16 @@ public class DoctorController {
         listPatients = doctorGotByUserCode.getPatients();
 
         if (listPatients.isEmpty()) {
-            System.err.println("You don't have any patients yet!!!");
+            System.out.println(ConsoleColors.RED + "You don't have any patients yet!!!");
+            if (validate.getYesNo("Do you want add a new patient(Y/N): ")) {
+                addNewPatient();
+                userDataIO.writeDataUser(listUsers);
+                return;
+            }
         } else {
-            System.out.println(String.format("%-10s|%-20s|%-10s|%-20s|%-20s", "ID", "NAME", "DESEASE TYPE", "CONSULT DATE", "CONSULT NOTE"));
+            System.out.println(String.format("%-10s|%-15s|%-15s|%-15s|%-15s", "ID", "NAME", "DESEASE TYPE", "CONSULT DATE", "CONSULT NOTE"));
             for (Patient patient : listPatients) {
-                System.out.println(patient);
+                System.out.println(patient.toString(dateFormat));
             }
             System.out.println("");
         }
@@ -64,10 +72,7 @@ public class DoctorController {
                     updateAPatient();
                     userDataIO.writeDataUser(listUsers);
                 } else {
-                    System.out.println(ConsoleColors.BLUE_BOLD + "Doctor nay nay chua co nhan vien nen k the update");
-                    if (validate.getYesNo("Do you want add a new patient(Y/N): ")) {
-                        addNewPatient();
-                    }
+                    System.out.println(ConsoleColors.RED + "You don't have any patients yet!!!");
                 }
                 break;
         }
@@ -124,8 +129,8 @@ public class DoctorController {
 
     private void printMENU_AddUpdatePatient() {
         System.out.println(ConsoleColors.BLUE_BOLD + "-----------------------------------");
-        System.out.println(ConsoleColors.BLUE_BOLD + "1\tAdd new a patient");
-        System.out.println(ConsoleColors.BLUE_BOLD + "2\tUpdate a patient");
+        System.out.println(ConsoleColors.BLUE_BOLD + "1. Add new a patient");
+        System.out.println(ConsoleColors.BLUE_BOLD + "2. Update a patient");
         System.out.println(ConsoleColors.BLUE_BOLD + "-----------------------------------");
     }
 

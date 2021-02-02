@@ -5,6 +5,7 @@ package Doctor;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import Common.ConsoleColors;
 import Common.Patient;
 import Common.UserRole;
 import User.User;
@@ -78,7 +79,7 @@ public class Doctor extends User implements Serializable {
 
     @Override
     public String toString() {
-        return getUserCode() + "\t" + getName()+ "\t";
+        return String.format("%-10s|%-20s", getUserCode(), getName());
     }
 
 }

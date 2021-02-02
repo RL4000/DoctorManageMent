@@ -46,7 +46,7 @@ public final class Validate {
                 return check;
             } else {
                 System.out.println(ConsoleColors.RED + "Wrong format! (Password >=6 char, include both number and char, not include any other type of char)");
-                System.err.println("Enter again: ");
+                System.out.println(ConsoleColors.RED + "Enter again: ");
             }
         }
     }
@@ -69,7 +69,7 @@ public final class Validate {
             System.out.print(MSG);
             String check = in.readLine().trim();
             if (check.isEmpty()) {
-                System.err.println("Input is not empty");
+                System.out.println(ConsoleColors.RED + "Input is not empty");
             } else {
                 return check;
             }
@@ -83,7 +83,7 @@ public final class Validate {
                 int number = Integer.parseInt(in.readLine());
                 return number;
             } catch (NumberFormatException e) {
-                System.err.println("Enter \"int\" type [" + Integer.MIN_VALUE + ", " + Integer.MAX_VALUE + "]");
+                System.out.println(ConsoleColors.RED + "Enter \"int\" type [" + Integer.MIN_VALUE + ", " + Integer.MAX_VALUE + "]");
             }
         }
     }
@@ -98,7 +98,7 @@ public final class Validate {
                 }
                 return number;
             } catch (NumberFormatException e) {
-                System.err.println("Valid input are in the range of[" + MIN + ", " + MAX + "]. ");
+                System.out.println(ConsoleColors.RED + "Valid input are in the range of[" + MIN + ", " + MAX + "]. ");
             }
         }
     }
@@ -218,7 +218,6 @@ public final class Validate {
     }
 
     public Date getDate(String MSG) throws IOException {
-        Date now = new Date();
         while (true) {
             String check = getString(MSG);
             SimpleDateFormat fd = new SimpleDateFormat("dd/MM/yyyy");
@@ -243,9 +242,9 @@ public final class Validate {
                 if (date.before(now)) {
                     return date;
                 }
-                System.err.println("Enter \"Date\" type before " + fd.format(now));
+                System.out.println(ConsoleColors.RED + "Enter \"Date\" type before " + fd.format(now));
             } catch (ParseException e) {
-                System.err.println("That day was not found");
+                System.out.println(ConsoleColors.RED + "That day was not found");
             }
         }
     }

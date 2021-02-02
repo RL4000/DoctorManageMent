@@ -73,7 +73,7 @@ public class Patient implements Serializable {
     }
 
     public String toString(SimpleDateFormat dateFormat) {
-        return String.format("%-10s|%-20s|%-20s|%-20s|%-20s", patientId, name, diseaseType, dateFormat.format(consultDate), consultNote);
+        return String.format("%-10s|%-15s|%-15s|%-15s|%-15s", patientId, name, diseaseType, dateFormat.format(consultDate), consultNote);
     }
 
 }
