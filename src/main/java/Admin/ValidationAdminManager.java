@@ -6,7 +6,7 @@
 package Admin;
 
 import Common.Patient;
-import Doctor.Doctor;
+import Common.UserRole;
 import User.User;
 import java.util.ArrayList;
 
@@ -27,7 +27,8 @@ public class ValidationAdminManager {
 
     public User getDoctorByUserCode(String usercode, ArrayList<User> users) {
         for (User user : users) {
-            if (usercode.equals(user.getUserCode())) {
+            if (user.getUserRole() == UserRole.AUTHORIZED_DOCTOR 
+                    && usercode.equals(user.getUserCode())) {
                 return user;
             }
         }

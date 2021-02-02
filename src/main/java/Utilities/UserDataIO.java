@@ -25,7 +25,7 @@ public class UserDataIO {
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
-            return null;
+            return new ArrayList<>();
         }
     }
 

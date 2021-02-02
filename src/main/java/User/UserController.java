@@ -5,17 +5,11 @@
  */
 package User;
 
-import Admin.Admin;
 import Common.ConsoleColors;
 import Utilities.UserDataIO;
 import Utilities.Validate;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.OptionalDataException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -57,8 +51,6 @@ public class UserController {
             userName = validate.getString("Input username: ");
             password = validate.getString("Input password: ");
 
-            
-
             users.forEach((u) -> {
                 if (u.getUserName().equals(userName) && u.getPassword().equals(password)) {
                     user = new User();
@@ -69,7 +61,7 @@ public class UserController {
                 }
             });
 
-            return (user!=null);
+            return (user != null);
 
         } catch (Exception ex) {
             Logger.getLogger(UserController.class.getName()).log(Level.SEVERE, null, ex);
@@ -104,20 +96,19 @@ public class UserController {
 
                             String oldPassword = validate.getString("Enter old password: ");
                             if (user.getPassword().equals(oldPassword)) {
-                                
+
                                 String newPassword = validate.getPassword("Enter new password: ");
                                 String confirmNewPassword = validate.getPassword("Confirm new password: ");
-                                
-                                if(confirmNewPassword.equals(newPassword)){
+
+                                if (confirmNewPassword.equals(newPassword)) {
                                     user.setPassword(newPassword);
                                     UserView.getInstance().updateUser(user);
-                                    
+
                                     System.out.println(ConsoleColors.GREEN_BOLD + "Password changed successfully!!");
-                                }else{
+                                } else {
                                     System.out.println(ConsoleColors.RED + "Passwords don't match!!");
                                 }
-                                
-                                
+
                             } else {
                                 System.out.println(ConsoleColors.RED + "Wrong password!!");
                             }

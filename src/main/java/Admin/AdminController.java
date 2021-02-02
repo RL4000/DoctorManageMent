@@ -41,23 +41,23 @@ public class AdminController {
         //--------Đọc data, xóa sau
         initMemoryData();
         while (true) {
-            listUsers = new ArrayList<>();
             listUsers = userDataIO.readDataUser();
+
             System.out.println(ConsoleColors.BLUE_BOLD + "LIST DOCTOR");
             for (User user : listUsers) {
                 if (user.getUserRole() == UserRole.AUTHORIZED_DOCTOR) {
                     System.out.println(user);
                 }
             }
-            System.err.println(ConsoleColors.RED + "Size: " + listUsers.size()); //8 element
 
-            String usercode = validate.getString("Enter usercode: ");
-            doctorGotByUserCode = (Doctor) adminManager.getDoctorByUserCode(usercode, listUsers);
-
-            if (doctorGotByUserCode == null) {
-                System.out.println("Doctor is not exist!!!");
-                System.out.println("");
-                continue;
+            while (true) {
+                String usercode = validate.getString("Enter usercode: ");
+                doctorGotByUserCode = (Doctor) adminManager.getDoctorByUserCode(usercode, listUsers);
+                if (doctorGotByUserCode == null) {
+                    System.err.println("This usercode does not exist, pls enter a new usercode ");
+                } else {
+                    break;
+                }
             }
 
             listPatients = doctorGotByUserCode.getPatients();
@@ -74,20 +74,18 @@ public class AdminController {
             }
 
             printMENU_AddUpdatePatient();
-            int choice = validate.getINT_LIMIT("Enter choice: ", 1, 2);
-            switch (choice) {
+            int selection = validate.getINT_LIMIT("Enter selection: ", 1, 2);
+            switch (selection) {
                 case 1:
                     addNewPatient();
                     userDataIO.writeDataUser(listUsers);
-                    ArrayList<User> abc = userDataIO.readDataUser();
-                    for (User user : abc) {
-                        System.out.println(user);
-                    }
                     break;
                 case 2:
                     if (!listPatients.isEmpty()) {
                         updateAPatient();
-                        new UserDataIO().writeDataUser(listUsers);
+                        userDataIO.writeDataUser(listUsers);
+                    } else {
+                        System.out.println("This doctor is not in charge of any patient");
                     }
                     break;
             }
@@ -108,7 +106,6 @@ public class AdminController {
             Patient patient = adminManager.getPatientByPatientID(patientid, listPatients);
             if (patient != null) {
                 System.out.println(ConsoleColors.RED + "ID exist");
-                System.out.println("");
                 continue;
             }
 
@@ -116,9 +113,7 @@ public class AdminController {
             String diseaseType = validate.getString("Enter diseaseType: ");
             Date consultDate = validate.getDate_LimitToCurrent("Enter consultDate: ");
             String consultNote = validate.getString("Enter consultNote: ");
-
             listPatients.add(new Patient(patientid, name, diseaseType, consultDate, consultNote));
-
             break;
         }
 

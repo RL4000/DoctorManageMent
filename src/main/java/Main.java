@@ -9,6 +9,7 @@ import Admin.AdminController;
 import Common.ConsoleColors;
 import Common.UserRole;
 import Doctor.Doctor;
+import Doctor.DoctorController;
 import User.User;
 import User.UserController;
 import Utilities.UserDataIO;
@@ -28,20 +29,29 @@ public class Main {
     static Validate validate;
     static UserController userController;
     static AdminController adminController;
+    static DoctorController doctorController;
 
     public static void main(String[] args) {
 
         validate = new Validate();
-        userController = UserController.getInstance();
         adminController = new AdminController();
+        doctorController = new DoctorController();
+        userController = UserController.getInstance();
 
         //------------------ADD TAM DATA VAO FILE USERS.DAT DE TEST, XOA SAU
         users = new ArrayList<>();
-        
-        users.add(new Admin("adminCode", "admin", "admin", UserRole.ADMIN));
+
+        users.add(new Admin("admin01", "admin01", "admin01", UserRole.ADMIN));
+        users.add(new Admin("admin02", "admin02", "admin02", UserRole.ADMIN));
+        users.add(new Admin("admin03", "admin03", "admin03", UserRole.ADMIN));
         users.add(new Doctor("doctor01", "doctor01", "doctor01", UserRole.AUTHORIZED_DOCTOR));
-        users.add(new Admin("doctor02", "doctor02", "doctor02", UserRole.ADMIN));
-        users.add(new Admin("doctor03", "doctor03", "doctor03", UserRole.ADMIN));
+        users.add(new Doctor("doctor02", "doctor02", "doctor02", UserRole.AUTHORIZED_DOCTOR));
+        users.add(new Doctor("doctor03", "doctor03", "doctor03", UserRole.AUTHORIZED_DOCTOR));
+        users.add(new Doctor("doctor04", "doctor04", "doctor04", UserRole.AUTHORIZED_DOCTOR));
+        users.add(new Doctor("doctor05", "doctor05", "doctor05", UserRole.AUTHORIZED_DOCTOR));
+        users.add(new Doctor("doctor06", "doctor06", "doctor06", UserRole.AUTHORIZED_DOCTOR));
+        users.add(new Doctor("doctor07", "doctor07", "doctor07", UserRole.AUTHORIZED_DOCTOR));
+
         new UserDataIO().writeDataUser(users);
         //------------------ADD TAM DATA VAO FILE USERS.DAT DE TEST, XOA SAU
 
@@ -108,10 +118,9 @@ public class Main {
             }
         }
     }
-    
-    private static void mainMenu(){
-        User user = userController.getLoggedInUser();
 
+    private static void mainMenu() {
+        User user = userController.getLoggedInUser();
         if (user != null) {
             if (user.getUserRole() == UserRole.ADMIN) {
                 adminMenu();
@@ -130,19 +139,18 @@ public class Main {
 
                 switch (choice) {
                     case 1:
-                        
                         break;
                     case 2:
                         adminController.processing();
                         break;
                     case 3:
-                        
+
                         break;
                     case 4:
-                        
+
                         break;
                     case 5:
-                        
+
                         break;
                     case 6:
                         userController.changePassword();
@@ -170,13 +178,13 @@ public class Main {
             try {
                 printDoctorMenu();
                 choice = validate.getINT_LIMIT("Your choice: ", 1, 4);
-                
+
                 switch (choice) {
                     case 1:
-                        
+                        doctorController.processing(userController.getLoggedInUser());
                         break;
                     case 2:
-                        
+
                         break;
                     case 3:
                         userController.changePassword();

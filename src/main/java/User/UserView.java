@@ -27,7 +27,6 @@ public class UserView {
         if (userView == null) {
             userView = new UserView();
         }
-
         return userView;
     }
 
