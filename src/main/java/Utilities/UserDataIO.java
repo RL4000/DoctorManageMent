@@ -24,7 +24,6 @@ public class UserDataIO {
                 return (ArrayList<User>) in.readObject();
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
             return new ArrayList<>();
         }
     }
@@ -35,7 +34,6 @@ public class UserDataIO {
                 oos.writeObject(users);
             }
         } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
