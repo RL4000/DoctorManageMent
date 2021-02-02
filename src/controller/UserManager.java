@@ -112,6 +112,12 @@ public class UserManager extends BaseManager {
     // ***************************************************
     //     Main methods
     // ***************************************************
+    public void login() {
+        String userName = Validate.getString("Enter user code: ");
+        String password = Validate.getString("Enter password: ");
+        login(userName, password);
+        System.out.printf("%s\n", getMessage());
+    }
      /**
      * Check if hash-ed string match.
      *

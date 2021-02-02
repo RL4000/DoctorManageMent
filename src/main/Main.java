@@ -26,68 +26,41 @@ import java.util.UUID;
  */
 public class Main {
 
-    private static DoctorManager testUserManager = new DoctorManager();
+    private static DoctorManager userManager = new DoctorManager();
     private static ConsultManager consultManager = new ConsultManager();
     private static boolean exit;
 
     public static void main(String[] args) {
+        userManager.loadUserList();
         //------------------ADD TAM DATA VAO FILE USERS.DAT DE TEST, XOA SAU
-
-        testUserManager.loadUserList();
-        if (testUserManager.getUserList().isEmpty()) {
-            testUserManager.addUser("adminCode", "admin", "admin", Role.ADMIN);
-            testUserManager.addDoctor("doctor01", "doctor01", "doctor01", Specialization.TIM_MACH, LocalDateTime.now());
-            testUserManager.addDoctor("doctor02", "doctor02", "doctor02", Specialization.UNG_BUOU, LocalDateTime.now());
-            testUserManager.addDoctor(null, "doctorNull", "doctorNull", Specialization.NHA_KHOA, LocalDateTime.now());
-            testUserManager.addUser("benhNhan01", "benhNhan01", "benhNhan01", Role.NORMAL_USER);
-            testUserManager.addUser("benhNhan02", "benhNhan01", "benhNhan02", Role.NORMAL_USER);
-            testUserManager.saveUserList();
+        if (userManager.getUserList().isEmpty()) {
+            userManager.addUser("adminCode", "admin", "admin", Role.ADMIN);
+            userManager.addDoctor("doctor01", "doctor01", "doctor01", Specialization.TIM_MACH, LocalDateTime.now());
+            userManager.addDoctor("doctor02", "doctor02", "doctor02", Specialization.UNG_BUOU, LocalDateTime.now());
+            userManager.addDoctor(null, "doctorNull", "doctorNull", Specialization.NHA_KHOA, LocalDateTime.now());
+            userManager.addUser("benhNhan01", "benhNhan01", "benhNhan01", Role.NORMAL_USER);
+            userManager.addUser("benhNhan02", "benhNhan01", "benhNhan02", Role.NORMAL_USER);
+            userManager.saveUserList();
         }
-
+        userManager.printUserList();
         //------------------ADD TAM DATA VAO FILE USERS.DAT DE TEST, XOA SAU
-        testUserManager.printUserList();
 
-        int userChoice;
         exit = false;
         while (!exit) {
-            if (testUserManager.getCurrentUser() == null) { // Not logged in
-                printLoginMenu();
-                System.out.printf("Choose: _");
-                userChoice = BasicInput.getInt(0, 1);
-                switch (userChoice) {
-                    case 0: {
-                        exit = true;
-                        break;
-                    }
-                    case 1: { // Login
-                        login();
-                        break;
-                    }
-                }
+            if (userManager.getCurrentUser() == null) { // Not logged in
+                loginBlock();
             } else { // Logged in
-                Role theRole = testUserManager.getCurrentUser().getRole();
+                Role theRole = userManager.getCurrentUser().getRole();
                 switch (theRole) {
                     case ADMIN: {
-                        // ******************* Admin functions *******************
                         functionsForAdmin();
                         break;
                     }
                     case DOCTOR: {
-                        // ******************* Doctor functions *******************
-                        // Add, update patient information of a specific doctor
-                        // Query doctor information, including patient status
-                        // Log in, log out, change password
                         functionsForDoctor();
                         break;
                     }
                     case NORMAL_USER: {
-                        // ******************* Normal user functions *******************
-                        // View list, add, update, delete doctor
-                        // Add, update patient information of a specific doctor
-                        // Query doctor information, including patient status
-                        // View list, add, update, delete user
-                        // Query & print of the patients grouped by disease type
-                        // Log in, log out, change password
                         functionsForUsers();
                         break;
                     }
@@ -97,9 +70,12 @@ public class Main {
     }
 
     // ***************************************************
-    //     Functional methods
+    //     Functional modules
     // ***************************************************
-    // BY ROLE
+    // --- By roles
+    /**
+     * Print menu and do functions for admin
+     */
     private static void functionsForAdmin() {
         printAdminMenu();
         System.out.printf("Choose: _");
@@ -135,7 +111,9 @@ public class Main {
             }
         }
     }
-
+    /**
+     * Print menu and do functions for doctor
+     */
     private static void functionsForDoctor() {
         printDoctorMenu();
         System.out.printf("Choose: _");
@@ -159,7 +137,9 @@ public class Main {
             }
         }
     }
-
+    /**
+     * Print menu and do functions for other users (patients)
+     */
     private static void functionsForUsers() {
         printNormalUserMenu();
         System.out.printf("Choose: _");
@@ -176,43 +156,64 @@ public class Main {
         }
     }
 
-    // BY BLOCKS
-    // View list, add, update, delete doctor
+    // --- By function block
+    /**
+     * Print menu and do login function
+     */
+    private static void loginBlock() {
+        printLoginMenu();
+        System.out.printf("Choose: _");
+        int userChoice = BasicInput.getInt(0, 1);
+        switch (userChoice) {
+            case 0: {
+                exit = true;
+                break;
+            }
+            case 1: { // Login
+                userManager.login();
+                break;
+            }
+        }
+    }
+    /**
+     * View list, add, update, delete doctor
+     */
     private static void functionBlock1() {
         printBlockMenu1();
         int subChoice = Validate.getINT_LIMIT("Choose: ", 1, 4);
         switch (subChoice) {
             case 1: { // View list doctor
-                testUserManager.printUserList(Role.DOCTOR);
+                userManager.printUserList(Role.DOCTOR);
                 break;
             }
             case 2: { // Add doctor
-                testUserManager.addDoctor();
+                userManager.addDoctor();
                 break;
             }
             case 3: { // Update doctor
-                testUserManager.updateDoctor();
+                userManager.updateDoctor();
                 break;
             }
             case 4: { // Delete doctor
-                testUserManager.deleteDoctor();
+                userManager.deleteDoctor();
                 break;
             }
         }
     }
-
-    // Add, update patient information of a specific doctor
+    /**
+     * Add, update patient information of a specific doctor
+     */
     private static void functionBlock2() {
         printBlockMenu2();
         int subChoice = Validate.getINT_LIMIT("Choose: ", 1, 4);
         switch (subChoice) {
             case 1: { // View list patient
                 Doctor tempDoctor;
-                if (testUserManager.getCurrentUser().getRole() == Role.DOCTOR) {
-                    tempDoctor = (Doctor) testUserManager.getCurrentUser();
+                if (userManager.getCurrentUser().getRole() == Role.DOCTOR) {
+                    tempDoctor = (Doctor) userManager.getCurrentUser();
                 } else {
                     int doctorID = Validate.getINT("Doctor ID: ");
-                    tempDoctor = testUserManager.getDoctor(doctorID);
+                    tempDoctor = userManager.getDoctor(doctorID);
                 }
                 if (tempDoctor != null) {
                     consultManager.printPatientList(tempDoctor);
@@ -223,8 +224,8 @@ public class Main {
                 break;
             }
             case 2: { // Add patient
-                Doctor theDoctor = testUserManager.getDoctor(Validate.getINT("DoctorID"));
-                User patient = testUserManager.getUser(Validate.getString("Patient ID"));
+                Doctor theDoctor = userManager.getDoctor(Validate.getINT("DoctorID"));
+                User patient = userManager.getUser(Validate.getString("Patient ID"));
                 if ((theDoctor != null) && (patient != null)) {
                     Specialization specialization = theDoctor.getSpecialization();
                     LocalDateTime date = Validate.toLocalDateTime(Validate.getDate("Date: "));
@@ -243,56 +244,64 @@ public class Main {
             }
         }
     }
-
-    // Query doctor information, including patient status
+    /**
+     * Query doctor information, including patient status. This is for admin.
+     * They can view any doctor's patients
+     */
     private static void functionBlock3() {
         int doctorCode = Validate.getINT("Doctor code to view: ");
-        consultManager.printPatientList(testUserManager.getDoctor(doctorCode));
+        consultManager.printPatientList(userManager.getDoctor(doctorCode));
     }
-
+    /**
+     * Query doctor information, including patient status. This is for doctor,
+     * they can only view their patient
+     */
     private static void functionBlock3Doctor() {
-        consultManager.printPatientList((Doctor) testUserManager.getCurrentUser());
+        consultManager.printPatientList((Doctor) userManager.getCurrentUser());
     }
-
-    // View list, add, update, delete user
+    /**
+     * View list, add, update, delete user
+     */
     private static void functionBlock4() {
         printBlockMenu4();
         int subChoice = Validate.getINT_LIMIT("Choose: ", 1, 4);
         switch (subChoice) {
             case 1: { // View user list
-                testUserManager.printUserList();
+                userManager.printUserList();
                 break;
             }
             case 2: { // Add user
-                testUserManager.addUser();
+                userManager.addUser();
                 break;
             }
             case 3: { // Update user
-                testUserManager.updateUser();
+                userManager.updateUser();
                 break;
             }
             case 4: { // Delete user
-                testUserManager.deleteUser();
+                userManager.deleteUser();
             }
         }
     }
-
-    // Query & print of the patients grouped by disease type
+    /**
+     * Query & print of the patients grouped by disease type
+     */
     private static void functionBlock5() {
         consultManager.printUserByDiseaseType();
     }
-
-    // log out, change password
+    /**
+     * log out, change password
+     */
     private static void functionBlock6() {
         printBlockMenu6();
         int subChoice = Validate.getINT_LIMIT("Choose: ", 1, 2);
         switch (subChoice) {
             case 1: { // Log out
-                testUserManager.logout();
+                userManager.logout();
                 break;
             }
             case 2: { // Change password
-                testUserManager.changePassword();
+                userManager.changePassword();
                 break;
             }
         }
@@ -301,7 +310,10 @@ public class Main {
     // ***************************************************
     //     Print functions
     // ***************************************************
-    // Menu by roles
+    // --- Menus by role
+    /**
+     * Print menu for admin
+     */
     private static void printAdminMenu() {
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
         System.out.println(ConsoleColors.BLUE_BOLD + "ADMIN PANEL");
@@ -314,7 +326,9 @@ public class Main {
         System.out.println(ConsoleColors.BLUE_BOLD + "7. Exit");
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
     }
-
+    /**
+     * Print menu for doctor
+     */
     private static void printDoctorMenu() {
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
         System.out.println(ConsoleColors.BLUE_BOLD + "DOCTOR PANEL");
@@ -324,7 +338,9 @@ public class Main {
         System.out.println(ConsoleColors.BLUE_BOLD + "4. Exit");
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
     }
-
+    /**
+     * Print menu for normal user (patient)
+     */
     private static void printNormalUserMenu() {
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
         System.out.println(ConsoleColors.BLUE_BOLD + "NORMAL USER PANEL");
@@ -332,8 +348,10 @@ public class Main {
         System.out.println(ConsoleColors.BLUE_BOLD + "2. Exit");
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
     }
-
-    // FUNCTION BLOCK MENUS
+    // --- Menu for function blocks
+    /**
+     * Login menu
+     */
     private static void printLoginMenu() {
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
         System.out.println(ConsoleColors.BLUE_BOLD + "Welcome to Doctor Management Program");
@@ -341,7 +359,9 @@ public class Main {
         System.out.println(ConsoleColors.BLUE_BOLD + "0. Exit");
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
     }
-
+    /**
+     * View list, add, update, delete doctor
+     */
     private static void printBlockMenu1() {
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
         System.out.println(ConsoleColors.BLUE_BOLD + "1. View doctor list");
@@ -350,7 +370,9 @@ public class Main {
         System.out.println(ConsoleColors.BLUE_BOLD + "4. Delete doctor");
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
     }
-
+    /**
+     * Add, update patient information of a specific doctor
+     */
     private static void printBlockMenu2() {
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
         System.out.println(ConsoleColors.BLUE_BOLD + "1. View patient");
@@ -359,7 +381,9 @@ public class Main {
         System.out.println(ConsoleColors.BLUE_BOLD + "4. Delete patient");
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
     }
-
+    /**
+     * View list, add, update, delete user
+     */
     private static void printBlockMenu4() {
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
         System.out.println(ConsoleColors.BLUE_BOLD + "1. View user list");
@@ -368,137 +392,13 @@ public class Main {
         System.out.println(ConsoleColors.BLUE_BOLD + "4. Delete user");
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
     }
-
+    /**
+     * log out, change password
+     */
     private static void printBlockMenu6() {
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
         System.out.println(ConsoleColors.BLUE_BOLD + "1. Log out");
         System.out.println(ConsoleColors.BLUE_BOLD + "2. Change password");
         System.out.println(ConsoleColors.BLUE_BOLD + "--------------------------------");
     }
-
-    // ***************************************************
-    //     Other functions
-    // ***************************************************
-    private static void login() {
-        String userName = Validate.getString("Enter user code: ");
-        String password = Validate.getString("Enter password: ");
-        testUserManager.login(userName, password);
-        System.out.printf("%s\n", testUserManager.getMessage());
-    }
-//<editor-fold defaultstate="collapsed" desc="draft">
-
-//
-//    private static void loginMenu() {
-//        int choice;
-//        while (true) {
-//            try {
-//                printLoginMenu();
-//                choice = Validate.getINT_LIMIT("Your choice: ", 0, 1);
-//                Boolean isLoggedIn = false;
-//                switch (choice) {
-//                    case 0:
-//                        return;
-//                    case 1:
-//                        isLoggedIn = userController.login();
-//                        break;
-//                    default:
-//                }
-//
-//                if (isLoggedIn) {
-//                    System.out.println(ConsoleColors.PURPLE_BOLD + "LOGGED IN SUCCESSFULLY!!");
-//                    break;
-//                } else {
-//                    System.out.println(ConsoleColors.RED_BOLD + "LOGGED IN FAILED!!");
-//                }
-//            } catch (IOException ex) {
-//                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//    }
-//
-//    private static void mainMenu() {
-//        User user = userController.getLoggedInUser();
-//
-//        if (user != null) {
-//            if (user.getRole() == Role.ADMIN) {
-//                adminMenu();
-//            } else if (user.getRole() == Role.AUTHORIZED_DOCTOR) {
-//                doctorMenu();
-//            }
-//        }
-//    }
-//
-//    private static void adminMenu() {
-//        int choice = -1;
-//        while (true) {
-//            try {
-//                printAdminMenu();
-//                choice = validate.getINT_LIMIT("Your choice: ", 1, 7);
-//
-//                switch (choice) {
-//                    case 1:
-//
-//                        break;
-//                    case 2:
-//
-//                        break;
-//                    case 3:
-//
-//                        break;
-//                    case 4:
-//
-//                        break;
-//                    case 5:
-//
-//                        break;
-//                    case 6:
-//                        userController.changePassword();
-//                        break;
-//                    case 7:
-//                        userController.logout();
-//                        login();
-//                        mainMenu();
-//                        return;
-//                    default:
-//                        break;
-//
-//                }
-//            } catch (IOException ex) {
-//                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//
-//    }
-//
-//    private static void doctorMenu() {
-//        int choice = -1;
-//        while (true) {
-//            try {
-//                printDoctorMenu();
-//                choice = validate.getINT_LIMIT("Your choice: ", 1, 4);
-//
-//                switch (choice) {
-//                    case 1:
-//
-//                        break;
-//                    case 2:
-//
-//                        break;
-//                    case 3:
-//                        userController.changePassword();
-//                        break;
-//                    case 4:
-//                        userController.logout();
-//                        login();
-//                        mainMenu();
-//                        return;
-//                    default:
-//                        break;
-//                }
-//            } catch (IOException ex) {
-//                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//        }
-//    }
-//</editor-fold>
 }
