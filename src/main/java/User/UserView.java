@@ -54,6 +54,7 @@ public class UserView {
         for (User u : users) {
             if (u.getUserCode().equals(userCode)) {
                 users.remove(u);
+                break;
             }
         }
         userDataIO.writeData(users);
