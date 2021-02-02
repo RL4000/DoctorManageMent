@@ -13,6 +13,7 @@ import java.io.IOException;
 import Doctor.Doctor;
 import User.User;
 import Utilities.UserDataIO;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -29,12 +30,15 @@ public class AdminController {
     ArrayList<User> listUsers;
     ArrayList<Patient> listPatients;
     Doctor doctorGotByUserCode;
+    
+    SimpleDateFormat dateFormat;
 
     public AdminController() {
         validate = new Validate();
         adminManager = new ValidationAdminManager();
         userDataIO = new UserDataIO();
         initMemoryData();
+        dateFormat = new SimpleDateFormat("dd/MMM/yyyy");
     }
 
     public void processing() throws IOException {
@@ -54,7 +58,7 @@ public class AdminController {
                 String usercode = validate.getString("Enter usercode: ");
                 doctorGotByUserCode = (Doctor) adminManager.getDoctorByUserCode(usercode, listUsers);
                 if (doctorGotByUserCode == null) {
-                    System.err.println("This usercode does not exist, pls enter a new usercode ");
+                    System.err.println("This usercode does not exist,  enter a new usercode ");
                 } else {
                     break;
                 }
@@ -66,9 +70,9 @@ public class AdminController {
                 System.out.println(ConsoleColors.RED + "List patient's this doctor is emty");
             } else {
                 System.out.println(ConsoleColors.BLUE_BOLD + "LIST PATIENT");
-                System.out.println(String.format("%-10s|%-10s|%-10s|%-20s|%-20s", "ID", "NAME", "DESEASE TYPE", "CONSULT DATE", "CONSULT NOTE"));
+                System.out.println(String.format("%-10s|%-20s|%-20s|%-20s|%-20s", "ID", "NAME", "DESEASE TYPE", "CONSULT DATE", "CONSULT NOTE"));
                 listPatients.forEach((patient) -> {
-                    System.out.println(patient);
+                    System.out.println(patient.toString(dateFormat));
                 });
                 System.out.println("");
             }

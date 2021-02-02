@@ -19,7 +19,7 @@ public class UserView {
     public static UserView userView = null;
 
     public UserView() {
-        users = new ArrayList<User>();
+        users = new ArrayList<>();
         userDataIO = new UserDataIO();
     }
 

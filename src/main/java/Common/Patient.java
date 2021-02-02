@@ -6,6 +6,7 @@
 package Common;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -71,9 +72,8 @@ public class Patient implements Serializable {
         this.consultNote = consultNote;
     }
 
-    @Override
-    public String toString() {
-        return String.format("%-10s|%-10s|%-10s|%-20s|%-20s", patientId, name, diseaseType, consultDate, consultNote);
+    public String toString(SimpleDateFormat dateFormat) {
+        return String.format("%-10s|%-20s|%-20s|%-20s|%-20s", patientId, name, diseaseType, dateFormat.format(consultDate), consultNote);
     }
 
 }
