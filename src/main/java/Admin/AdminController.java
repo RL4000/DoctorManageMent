@@ -45,7 +45,7 @@ public class AdminController {
         //--------Đọc data, xóa sau
         initMemoryData();
         while (true) {
-            listUsers = userDataIO.readDataUser();
+            listUsers = userDataIO.readData();
 
             System.out.println(ConsoleColors.BLUE_BOLD + "LIST DOCTOR");
             System.out.println(String.format("%-10s|%-20s", "USERCODE", "NAME"));
@@ -84,12 +84,12 @@ public class AdminController {
             switch (selection) {
                 case 1:
                     addNewPatient();
-                    userDataIO.writeDataUser(listUsers);
+                    userDataIO.writeData(listUsers);
                     break;
                 case 2:
                     if (!listPatients.isEmpty()) {
                         updateAPatient();
-                        userDataIO.writeDataUser(listUsers);
+                        userDataIO.writeData(listUsers);
                     } else {
                         System.out.println("This doctor is not in charge of any patient");
                     }

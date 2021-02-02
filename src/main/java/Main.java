@@ -53,7 +53,7 @@ public class Main {
         users.add(new Doctor("doctor06", "doctor06", "doctor06", UserRole.AUTHORIZED_DOCTOR));
         users.add(new Doctor("doctor07", "doctor07", "doctor07", UserRole.AUTHORIZED_DOCTOR));
 
-        new UserDataIO().writeDataUser(users);
+        new UserDataIO().writeData(users);
         //------------------ADD TAM DATA VAO FILE USERS.DAT DE TEST, XOA SAU
 
         loginMenu();

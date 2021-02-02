@@ -40,14 +40,13 @@ public class UserView {
     }
 
     public ArrayList<User> getUsers() {
-        return userDataIO.readDataUser();
+        return userDataIO.readData();
     }
 
     public void addUser(User user) {
         users = userDataIO.readData();
-        users = userDataIO.readDataUser();
         users.add(user);
-        userDataIO.writeDataUser(users);
+        userDataIO.writeData(users);
     }
 
     public void deleteUser(String userCode) {
@@ -63,24 +62,12 @@ public class UserView {
 
     public void updateUser(User userUpdate) {
         users = userDataIO.readData();
-        for (User u : users) {
-        users = userDataIO.readDataUser();
-        users.forEach((u) -> {
-            if (u.getUserCode().equalsIgnoreCase(userCode)) {
-                users.remove(u);
-            }
-        });
-        userDataIO.writeDataUser(users);
-    }
-
-    public void updateUser(User userUpdate) {
-        users = userDataIO.readDataUser();
         users.forEach((u) -> {
             if (u.getUserCode().equalsIgnoreCase(userUpdate.getUserCode())) {
                 u.setUserName(userUpdate.getUserName());
                 u.setPassword(userUpdate.getPassword());
             }
-        }
+        });
         userDataIO.writeData(users);
     }
 
@@ -246,10 +233,8 @@ public class UserView {
                 default:
                     break;
             }
+            userDataIO.writeData(users);
         }
-
-        userDataIO.writeDataUser(users);}
     }
-};
 
 }

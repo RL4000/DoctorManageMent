@@ -41,7 +41,7 @@ public class DoctorController {
 
     public void processing(User loggedInUser) throws IOException {
         initMemoryData();
-        listUsers = userDataIO.readDataUser();
+        listUsers = userDataIO.readData();
         doctorGotByUserCode = (Doctor) validationAdminManager.getDoctorByUserCode(loggedInUser.getUserCode(), listUsers);
         listPatients = doctorGotByUserCode.getPatients();
 
@@ -49,7 +49,7 @@ public class DoctorController {
             System.out.println(ConsoleColors.RED + "You don't have any patients yet!!!");
             if (validate.getYesNo("Do you want add a new patient(Y/N): ")) {
                 addNewPatient();
-                userDataIO.writeDataUser(listUsers);
+                userDataIO.writeData(listUsers);
                 return;
             }
         } else {
@@ -65,12 +65,12 @@ public class DoctorController {
         switch (choice) {
             case 1:
                 addNewPatient();
-                userDataIO.writeDataUser(listUsers);
+                userDataIO.writeData(listUsers);
                 break;
             case 2:
                 if (!listPatients.isEmpty()) {
                     updateAPatient();
-                    userDataIO.writeDataUser(listUsers);
+                    userDataIO.writeData(listUsers);
                 } else {
                     System.out.println(ConsoleColors.RED + "You don't have any patients yet!!!");
                 }
