@@ -15,6 +15,7 @@ import User.UserController;
 import User.UserView;
 import Utilities.UserDataIO;
 import Utilities.Validate;
+import controller.ConsultManager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -31,6 +32,8 @@ public class Main {
     static UserController userController;
     static AdminController adminController;
     static DoctorController doctorController;
+    private static ConsultManager consultManager = new ConsultManager();
+    
 
     public static void main(String[] args) {
 
@@ -152,7 +155,7 @@ public class Main {
 
                         break;
                     case 5:
-
+                        functionBlock5();
                         break;
                     case 6:
                         userController.changePassword();
@@ -186,7 +189,7 @@ public class Main {
                         doctorController.processing(userController.getLoggedInUser());
                         break;
                     case 2:
-
+                        functionBlock5();
                         break;
                     case 3:
                         userController.changePassword();
@@ -204,6 +207,14 @@ public class Main {
                 break;
             }
         }
+    }
+
+    
+    /**
+     * Query & print of the patients grouped by disease type
+     */
+    private static void functionBlock5() {
+        consultManager.printUserByDiseaseType();
     }
 
 }
