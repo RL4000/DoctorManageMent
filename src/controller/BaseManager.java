@@ -1,8 +1,5 @@
 package controller;
 
-import entity.Consult;
-import entity.Doctor;
-import entity.Role;
 import entity.User;
 
 /**

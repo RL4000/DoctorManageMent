@@ -90,7 +90,7 @@ public class User implements Serializable{
 
     @Override
     public String toString() {
-        return userCode + " | " + role.name() +" named: " + userName;
+        return "Code "+ userCode + " | " + role.name() +" named: " + userName;
     }
     
 }

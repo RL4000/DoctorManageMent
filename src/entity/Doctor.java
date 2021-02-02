@@ -43,7 +43,7 @@ public class Doctor extends User{
 
     @Override
     public String toString() {
-        return "Doctor{" + "doctorCode=" + doctorCode + ", specialization=" + specialization + ", avaliability=" + avaliability + '}';
+        return super.toString() + " at specialization " + specialization + " | Doc ID: " + doctorCode;
     }
 
     

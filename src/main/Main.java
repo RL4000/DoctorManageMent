@@ -34,13 +34,16 @@ public class Main {
         //------------------ADD TAM DATA VAO FILE USERS.DAT DE TEST, XOA SAU
 
         testUserManager.loadUserList();
-        testUserManager.addUser("adminCode", "admin", "admin", Role.ADMIN);
-        testUserManager.addDoctor("doctor01", "doctor01", "doctor01", Specialization.TIM_MACH, LocalDateTime.now());
-        testUserManager.addDoctor("doctor02", "doctor02", "doctor02", Specialization.UNG_BUOU, LocalDateTime.now());
-        testUserManager.addDoctor(null, "doctorNull", "doctorNull", Specialization.NHA_KHOA, LocalDateTime.now());
-        testUserManager.addUser("benhNhan01", "benhNhan01", "benhNhan01", Role.NORMAL_USER);
-        testUserManager.addUser("benhNhan02", "benhNhan01", "benhNhan02", Role.NORMAL_USER);
-        testUserManager.saveUserList();
+        if (testUserManager.getUserList().isEmpty()) {
+            testUserManager.addUser("adminCode", "admin", "admin", Role.ADMIN);
+            testUserManager.addDoctor("doctor01", "doctor01", "doctor01", Specialization.TIM_MACH, LocalDateTime.now());
+            testUserManager.addDoctor("doctor02", "doctor02", "doctor02", Specialization.UNG_BUOU, LocalDateTime.now());
+            testUserManager.addDoctor(null, "doctorNull", "doctorNull", Specialization.NHA_KHOA, LocalDateTime.now());
+            testUserManager.addUser("benhNhan01", "benhNhan01", "benhNhan01", Role.NORMAL_USER);
+            testUserManager.addUser("benhNhan02", "benhNhan01", "benhNhan02", Role.NORMAL_USER);
+            testUserManager.saveUserList();
+        }
+
         //------------------ADD TAM DATA VAO FILE USERS.DAT DE TEST, XOA SAU
         testUserManager.printUserList();
 
@@ -223,7 +226,7 @@ public class Main {
                 Doctor theDoctor = testUserManager.getDoctor(Validate.getINT("DoctorID"));
                 User patient = testUserManager.getUser(Validate.getString("Patient ID"));
                 if ((theDoctor != null) && (patient != null)) {
-                    Specialization specialization = testUserManager.selectSpecialization();
+                    Specialization specialization = theDoctor.getSpecialization();
                     LocalDateTime date = Validate.toLocalDateTime(Validate.getDate("Date: "));
                     String note = Validate.getString("Note: ");
                     consultManager.addConsult(theDoctor, patient, specialization, date, note);

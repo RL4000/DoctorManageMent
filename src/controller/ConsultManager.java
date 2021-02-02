@@ -183,6 +183,7 @@ public class ConsultManager extends BaseManager {
             System.out.printf("%s\n", currentSpecialization.name());
             for (Consult currentConsult : consultList) {
                 if (currentSpecialization != currentConsult.getDiseaseType()) {
+                    currentSpecialization = currentConsult.getDiseaseType();
                     System.out.printf("%s\n", currentSpecialization.name());
                 }
                 System.out.printf("\t%s\n", currentConsult.getPatient().toString());

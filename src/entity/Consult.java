@@ -1,8 +1,9 @@
 package entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
-public class Consult {
+public class Consult implements Serializable{
     private int consultID;
     private Doctor doctor;
     private User patient;
