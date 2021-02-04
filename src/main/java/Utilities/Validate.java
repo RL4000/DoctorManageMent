@@ -11,8 +11,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 /**
@@ -27,68 +32,86 @@ public final class Validate {
     private static final String EMAIL_VALID = "^[A-Za-z0-9.+-_%]+@[A-Za-z.-]+\\.[A-Za-z]{2,4}$";
 
     //getPhone
-    static Pattern PHONE_NUMBER_1 = Pattern.compile("^[0-9]{10}$");
-    static Pattern PHONE_NUMBER_2 = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$");
-    static Pattern PHONE_NUMBER_3 = Pattern.compile("^[0-9]{3}.[0-9]{3}.[0-9]{4}$");
-    static Pattern PHONE_NUMBER_4 = Pattern.compile("^[0-9]{3} [0-9]{3} [0-9]{4}$");
-    static Pattern PHONE_NUMBER_5 = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4} [e|ext][0-9]{4}$");
-    static Pattern PHONE_NUMBER_6 = Pattern.compile("^\\([0-9]{3}\\)-[0-9]{3}-[0-9]{4}$");
-    
-    
-    static Pattern PATTERN_USERNAME = Pattern.compile("^[A-Za-z][A-Za-z0-9]{4,}$");
-    static Pattern PATTERN_PASSWORD = Pattern.compile("^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{6,}$");
+    private static final Pattern P1 = Pattern.compile("^[0-9]{10}$");
+    private static final Pattern P2 = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4}$");
+    private static final Pattern P3 = Pattern.compile("^[0-9]{3}.[0-9]{3}.[0-9]{4}$");
+    private static final Pattern P4 = Pattern.compile("^[0-9]{3} [0-9]{3} [0-9]{4}$");
+    private static final Pattern P5 = Pattern.compile("^[0-9]{3}-[0-9]{3}-[0-9]{4} [e|ext][0-9]{4}$");
+    private static final Pattern P6 = Pattern.compile("^\\([0-9]{3}\\)-[0-9]{3}-[0-9]{4}$");
+    private static final Pattern PATTERN_USER_NAME = Pattern.compile("^[A-Za-z][A-Za-z0-9]{4,}$");
+    private static final Pattern PATTERN_PASSWORD = Pattern.compile("^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{6,}$");
 
-    public String getPassword(String MSG) throws IOException {
+    /**
+     *
+     * @param MSG
+     * @return A String must not empty
+     * @
+     */
+    public static String getPassword(String MSG) {
         while (true) {
-            System.out.print(MSG);
-            String check = in.readLine().trim();
-            if (PATTERN_PASSWORD.matcher(check).find()) {
-                return check;
-            } else {
-                System.out.println(ConsoleColors.RED + "Wrong format! (Password >=6 char, include both number and char, not include any other type of char)");
-                System.out.println(ConsoleColors.RED + "Enter again: ");
+            try {
+                System.out.print(MSG);
+                String check = in.readLine().trim();
+                if (PATTERN_PASSWORD.matcher(check).find()) {
+                    return check;
+                } else {
+                    System.out.println(ConsoleColors.RED + "Wrong format! (Password >=6 char, include both number and char, not include any other type of char)");
+                    System.err.println("Enter again: ");
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Validate.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public String getUsername(String MSG) throws IOException {
+    public static String getUsername(String MSG) {
         while (true) {
-            System.out.print(MSG);
-            String check = in.readLine().trim();
-            if (PATTERN_USERNAME.matcher(check).find()) {
-                return check;
-            } else {
-                System.out.println(ConsoleColors.RED + "Wrong format! (Password >=5 char, starts with character)");
-                System.err.println("Enter again: ");
+            try {
+                System.out.print(MSG);
+                String check = in.readLine().trim();
+                if (PATTERN_USER_NAME.matcher(check).find()) {
+                    return check;
+                } else {
+                    System.out.println(ConsoleColors.RED + "Wrong format! (Password >=5 char, starts with character)");
+                    System.err.println("Enter again: ");
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Validate.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public String getString(String MSG) throws IOException {
+    public static String getString(String MSG) {
         while (true) {
-            System.out.print(MSG);
-            String check = in.readLine().trim();
-            if (check.isEmpty()) {
-                System.out.println(ConsoleColors.RED + "Input is not empty");
-            } else {
-                return check;
+            try {
+                System.out.print(MSG);
+                String check = in.readLine().trim();
+                if (check.isEmpty()) {
+                    System.err.println("Input is not empty");
+                } else {
+                    return check;
+                }
+            } catch (IOException ex) {
+                Logger.getLogger(Validate.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public int getINT(String MSG) throws IOException {
+    public static int getINT(String MSG) {
         while (true) {
             try {
                 System.out.print(MSG);
                 int number = Integer.parseInt(in.readLine());
                 return number;
             } catch (NumberFormatException e) {
-                System.out.println(ConsoleColors.RED + "Enter \"int\" type [" + Integer.MIN_VALUE + ", " + Integer.MAX_VALUE + "]");
+                System.err.println("Enter \"int\" type [" + Integer.MIN_VALUE + ", " + Integer.MAX_VALUE + "]");
+            } catch (IOException ex) {
+                Logger.getLogger(Validate.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public int getINT_LIMIT(String MSG, int MIN, int MAX) throws IOException {
+    public static int getINT_LIMIT(String MSG, int MIN, int MAX) {
         while (true) {
             try {
                 System.out.print(MSG);
@@ -98,12 +121,14 @@ public final class Validate {
                 }
                 return number;
             } catch (NumberFormatException e) {
-                System.out.println(ConsoleColors.RED + "Valid input are in the range of[" + MIN + ", " + MAX + "]. ");
+                System.err.println("Valid input are in the range of[" + MIN + ", " + MAX + "]. ");
+            } catch (IOException ex) {
+                Logger.getLogger(Validate.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public double getDOUBLE(String MSG) throws IOException {
+    public static double getDOUBLE(String MSG) {
         while (true) {
             try {
                 System.out.print(MSG);
@@ -111,11 +136,13 @@ public final class Validate {
                 return number;
             } catch (NumberFormatException e) {
                 System.err.println("Enter \"double\" type [" + Double.MIN_VALUE + ", " + Double.MAX_VALUE + "]");
+            } catch (IOException ex) {
+                Logger.getLogger(Validate.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public double getDOUBLE_LIMIT(String MSG, double MIN, double MAX) throws IOException {
+    public static double getDOUBLE_LIMIT(String MSG, double MIN, double MAX) {
         while (true) {
             try {
                 System.out.print(MSG);
@@ -126,11 +153,13 @@ public final class Validate {
                 return number;
             } catch (NumberFormatException e) {
                 System.err.println("Enter \"double\" about [" + MIN + ", " + MAX + "]");
+            } catch (IOException ex) {
+                Logger.getLogger(Validate.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public float getFLOAT(String MSG) throws IOException {
+    public static float getFLOAT(String MSG) {
         while (true) {
             try {
                 System.out.print(MSG);
@@ -138,11 +167,13 @@ public final class Validate {
                 return number;
             } catch (NumberFormatException e) {
                 System.err.println("Enter \"float\" type [" + Float.MIN_VALUE + ", " + Float.MAX_VALUE + "]");
+            } catch (IOException ex) {
+                Logger.getLogger(Validate.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public float getFLOAT_LIMIT(String MSG, float MIN, float MAX) throws IOException {
+    public static float getFLOAT_LIMIT(String MSG, float MIN, float MAX) {
         while (true) {
             try {
                 System.out.print(MSG);
@@ -153,11 +184,13 @@ public final class Validate {
                 return number;
             } catch (NumberFormatException e) {
                 System.err.println("Enter \"float\" about [" + MIN + ", " + MAX + "]");
+            } catch (IOException ex) {
+                Logger.getLogger(Validate.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
     }
 
-    public boolean getYesNo(String MSG) throws IOException {
+    public static boolean getYesNo(String MSG) {
         while (true) {
             String check = getString(MSG);
             if (check.equalsIgnoreCase("Y")) {
@@ -170,7 +203,7 @@ public final class Validate {
         }
     }
 
-    public boolean getUpdateDelete(String MSG) throws IOException {
+    public static boolean getUpdateDelete(String MSG) {
         while (true) {
             String check = getString(MSG);
             if (check.equalsIgnoreCase("U")) {
@@ -183,7 +216,7 @@ public final class Validate {
         }
     }
 
-    public String getEmail(String MSG) throws IOException {
+    public static String getEmail(String MSG) {
         while (true) {
             String email = getString(MSG);
             if (email.matches(EMAIL_VALID)) {
@@ -194,12 +227,12 @@ public final class Validate {
         }
     }
 
-    public String getPhone(String MSG) throws IOException {
+    public static String getPhone(String MSG) {
         while (true) {
             String phone = getString(MSG);
-            if (PHONE_NUMBER_1.matcher(phone).find() || PHONE_NUMBER_2.matcher(phone).find()
-                    || PHONE_NUMBER_3.matcher(phone).find() || PHONE_NUMBER_4.matcher(phone).find()
-                    || PHONE_NUMBER_5.matcher(phone).find() || PHONE_NUMBER_6.matcher(phone).find()) {
+            if (P1.matcher(phone).find() || P2.matcher(phone).find()
+                    || P3.matcher(phone).find() || P4.matcher(phone).find()
+                    || P5.matcher(phone).find() || P6.matcher(phone).find()) {
                 return phone;
             } else {
                 if (getYesNo("Do you want show fomat: ")) {
@@ -217,7 +250,14 @@ public final class Validate {
         }
     }
 
-    public Date getDate(String MSG) throws IOException {
+    /**
+     *
+     * @param MSG
+     * @return A day is not limit
+     * @
+     */
+    public static Date getDate(String MSG) {
+        Date now = new Date();
         while (true) {
             String check = getString(MSG);
             SimpleDateFormat fd = new SimpleDateFormat("dd/MM/yyyy");
@@ -231,7 +271,13 @@ public final class Validate {
         }
     }
 
-    public Date getDate_LimitToCurrent(String MSG) throws IOException {
+    /**
+     *
+     * @param MSG
+     * @return A day is limit with current
+     * @
+     */
+    public static Date getDate_LimitToCurrent(String MSG) {
         Date now = new Date();
         while (true) {
             String check = getString(MSG);
@@ -242,14 +288,45 @@ public final class Validate {
                 if (date.before(now)) {
                     return date;
                 }
-                System.out.println(ConsoleColors.RED + "Enter \"Date\" type before " + fd.format(now));
+                System.err.println("Enter \"Date\" type before " + fd.format(now));
             } catch (ParseException e) {
-                System.out.println(ConsoleColors.RED + "That day was not found");
+                System.err.println("That day was not found");
             }
         }
     }
 
-    public int getAge(Date birthDay) {
+    public static Date getDate_LimitFromCurrent(String MSG) {
+        Date now = new Date();
+        while (true) {
+            String check = getString(MSG);
+            SimpleDateFormat fd = new SimpleDateFormat("dd/MM/yyyy");
+            fd.setLenient(false);
+            try {
+                Date date = fd.parse(check);
+                if (date.after(now)) {
+                    return date;
+                }
+                System.err.println("Enter \"Date\" type before " + fd.format(now));
+            } catch (ParseException e) {
+                System.err.println("That day was not found");
+            }
+        }
+    }
+
+    public static LocalDateTime getLocalDateTime(String MSG) {
+        LocalDateTime result;
+        DateTimeFormatter fm = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        while (true) {
+            try {
+                result = LocalDateTime.parse(getString(MSG), fm);
+                return result;
+            } catch (Exception e) {
+                System.out.printf("\tShould be in format yyyy-mm-dd hh-mm-ss | Enter again: ");
+            }
+        }
+    }
+
+    public static int getAge(Date birthDay) {
         Calendar now = Calendar.getInstance();
         Calendar birth = Calendar.getInstance();
 

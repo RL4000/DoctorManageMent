@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Consult;
+package Doctor;
 
 /**
  *
@@ -15,5 +15,7 @@ public enum Specialization {
     XUONG_KHOP,
     DA_LIEU,
     UNG_BUOU,
-    NHA_KHOA,
+    NHA_KHOA;
+    
+    
 }

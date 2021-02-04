@@ -41,6 +41,12 @@ public class AdminController {
         dateFormat = new SimpleDateFormat("dd/MMM/yyyy");
     }
 
+    public ArrayList<User> getListUsers() {
+        return listUsers;
+    }
+    
+    
+
     public void processing() throws IOException {
         //--------Đọc data, xóa sau
         initMemoryData();

@@ -7,7 +7,7 @@ package User;
 
 import Admin.Admin;
 import Common.UserRole;
-import Consult.Specialization;
+import Doctor.Specialization;
 import Doctor.Doctor;
 import Utilities.UserDataIO;
 import Utilities.Validate;

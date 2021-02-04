@@ -7,7 +7,10 @@
 import Admin.Admin;
 import Admin.AdminController;
 import Common.ConsoleColors;
+import Common.Patient;
 import Common.UserRole;
+import Consult.Consult;
+import Doctor.Specialization;
 import Doctor.Doctor;
 import Doctor.DoctorController;
 import User.User;
@@ -17,6 +20,7 @@ import Utilities.UserDataIO;
 import Utilities.Validate;
 import controller.ConsultManager;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,7 +37,6 @@ public class Main {
     static AdminController adminController;
     static DoctorController doctorController;
     private static ConsultManager consultManager = new ConsultManager();
-    
 
     public static void main(String[] args) {
 
@@ -98,27 +101,22 @@ public class Main {
     private static void loginMenu() {
         int choice;
         while (true) {
-            try {
-                printLoginMenu();
-                choice = validate.getINT_LIMIT("Your choice: ", 0, 1);
-                Boolean isLoggedIn = false;
-                switch (choice) {
-                    case 0:
-                        return;
-                    case 1:
-                        isLoggedIn = userController.login();
-                        break;
-                    default:
-                }
-
-                if (isLoggedIn) {
-                    System.out.println(ConsoleColors.PURPLE_BOLD + "LOGGED IN SUCCESSFULLY!!");
+            printLoginMenu();
+            choice = validate.getINT_LIMIT("Your choice: ", 0, 1);
+            Boolean isLoggedIn = false;
+            switch (choice) {
+                case 0:
+                    return;
+                case 1:
+                    isLoggedIn = userController.login();
                     break;
-                } else {
-                    System.out.println(ConsoleColors.RED_BOLD + "LOGGED IN FAILED!!");
-                }
-            } catch (IOException ex) {
-                Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                default:
+            }
+            if (isLoggedIn) {
+                System.out.println(ConsoleColors.PURPLE_BOLD + "LOGGED IN SUCCESSFULLY!!");
+                break;
+            } else {
+                System.out.println(ConsoleColors.RED_BOLD + "LOGGED IN FAILED!!");
             }
         }
     }
@@ -209,12 +207,27 @@ public class Main {
         }
     }
 
-    
     /**
      * Query & print of the patients grouped by disease type
      */
     private static void functionBlock5() {
-        consultManager.printUserByDiseaseType();
+        ArrayList<User> tempUserList = adminController.getListUsers();
+        ArrayList<Consult> tempConsultList = new ArrayList<>();
+        for (User user : tempUserList) {
+            if (user.getUserRole() == UserRole.AUTHORIZED_DOCTOR) {
+                Doctor tempDoctor = (Doctor) user;
+                for (Patient patient : tempDoctor.getPatients()) {
+                    tempConsultList.add(new Consult(tempDoctor, patient.getName(), tempDoctor.getSpecialization()));
+                }
+            }
+        }
+        for (Specialization value : Specialization.values()) {
+            for (Consult consult : tempConsultList) {
+                if (consult.getDiseaseType() == value) {
+                    System.out.println(consult.getPatient());
+                }
+            }
+        }
     }
 
 }
