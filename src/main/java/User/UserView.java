@@ -121,7 +121,7 @@ public class UserView {
         int choice;
         try {
             System.out.println("what account you want to create\n" + "1.Admin\n" + "2.Authorized_Doctor\n"
-                    + "3.Doctor\n" + "4.NormalUserWithNotThingSpecialOtherThanChangePassword\n" + "0.Cancel");
+                    + "3.Doctor\n" + "4.Normal User\n" + "0.Cancel");
             choice = validate.getINT_LIMIT("Your choice: ", 0, 4);
             if (choice == 0) {
                 return;
@@ -216,7 +216,7 @@ public class UserView {
     public void doFunction4() throws IOException {
         int choice = 1;
         while (true) {
-            System.out.println("--------------------------------\n" + "Option 4 pls choose what you want to do\n"
+            System.out.println("--------------------------------\n" + "Option 4 please choose what you want to do\n"
                     + " 1. view list of all user\n" + " 2. add user\n" + " 3. update user\n" + " 4. deleted user\n"
                     + " 0. Back to main menu\n" + "--------------------------------");
             choice = validate.getINT_LIMIT("Choose: ", 0, 4);
