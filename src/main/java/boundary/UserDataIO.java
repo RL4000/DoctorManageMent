@@ -5,7 +5,7 @@
  */
 package boundary;
 
-import entity.User;
+import User.User;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

@@ -1,12 +1,10 @@
 package Consult;
 
 
+import Common.UserRole;
+import Doctor.Doctor;
+import User.User;
 import boundary.Validate;
-import entity.Consult;
-import entity.Doctor;
-import entity.Role;
-import entity.Specialization;
-import entity.User;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -124,7 +122,7 @@ public class ConsultManager {
         if (toUpdate != null) {
             toUpdate.setConsultTime(consultUpdate.getConsultTime());
             toUpdate.setDiseaseType(consultUpdate.getDiseaseType());
-            if (currentUser.getRole() == Role.ADMIN) {
+            if (currentUser.getUserRole() == UserRole.ADMIN) {
                 toUpdate.setDoctor(consultUpdate.getDoctor());
                 toUpdate.setPatient(consultUpdate.getPatient());
             }
@@ -143,7 +141,7 @@ public class ConsultManager {
     public void deleteConsult(User currentUser, int consultID) {
         Consult toDelete = getConsult(consultID);
         if (toDelete != null) {
-            if (currentUser.getRole() == Role.ADMIN) {
+            if (currentUser.getUserRole() == UserRole.ADMIN) {
                 consultList.remove(toDelete);
             }
         } else {
@@ -200,7 +198,7 @@ public class ConsultManager {
     public void printConsultLists(User currentUser) {
         if (consultList.size() > 0) {
 
-            if (currentUser.getRole() == Role.ADMIN) {
+            if (currentUser.getUserRole() == UserRole.ADMIN) {
                 for (Consult currentConsult : consultList) {
                     System.out.printf("%s\n", currentConsult.toString());
                 }
@@ -212,7 +210,7 @@ public class ConsultManager {
     public void printConsultLists(User currentUser, Doctor doctor) {
         if (consultList.size() > 0) {
 
-            if (currentUser.getRole() == Role.ADMIN) {
+            if (currentUser.getUserRole() == UserRole.ADMIN) {
                 for (Consult currentConsult : consultList) {
                     if (currentConsult.getDoctor().equals(doctor)) {
                         System.out.printf("%s\n", currentConsult.toString());

@@ -1,7 +1,6 @@
 package boundary;
 
-import entity.Consult;
-import entity.User;
+import Consult.Consult;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
