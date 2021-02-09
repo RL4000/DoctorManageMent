@@ -12,7 +12,4 @@ package Doctor;
  */
 public class DoctorView {
     
-    
-    public void something(){
-    }
 }
