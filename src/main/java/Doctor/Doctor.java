@@ -38,6 +38,36 @@ public class Doctor extends User implements Serializable {
         this.patients = new ArrayList<>();
     }
 
+    public Doctor(int doctorId, String name, Specialization specialization, Date availability, ArrayList<Patient> patients, UserRole userRole) {
+       super(userRole);
+        this.doctorId = doctorId;
+        this.name = name;
+        this.specialization = specialization;
+        this.availability = availability;
+        this.patients = patients;
+    }
+
+    public Doctor(int doctorId, String name, Specialization specialization, Date availability, ArrayList<Patient> patients, String userName, String password, UserRole userRole) {
+        super(userName, password, userRole);
+        this.doctorId = doctorId;
+        this.name = name;
+        this.specialization = specialization;
+        this.availability = availability;
+        this.patients = patients;
+    }
+
+    public Doctor(int doctorId, String name, Specialization specialization, Date availability, ArrayList<Patient> patients, String userCode, String userName, String password, UserRole userRole) {
+        super(userCode, userName, password, userRole);
+        this.doctorId = doctorId;
+        this.name = name;
+        this.specialization = specialization;
+        this.availability = availability;
+        this.patients = patients;
+    }
+    
+    
+    
+
     public int getDoctorId() {
         return doctorId;
     }

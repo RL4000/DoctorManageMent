@@ -6,6 +6,7 @@
 package User;
 
 import Common.ConsoleColors;
+import Common.UserRole;
 import Utilities.UserDataIO;
 import Utilities.Validate;
 import java.io.IOException;
@@ -52,12 +53,14 @@ public class UserController {
             password = validate.getString("Input password: ");
 
             users.forEach((u) -> {
-                if (u.getUserName().equals(userName) && u.getPassword().equals(password)) {
-                    user = new User();
-                    user.setUserName(userName);
-                    user.setPassword(password);
-                    user.setUserCode(u.getUserCode());
-                    user.setUserRole(u.getUserRole());
+                if (u.getUserRole() == UserRole.ADMIN || u.getUserRole() == UserRole.AUTHORIZED_DOCTOR) {
+                    if (u.getUserName().equals(userName) && u.getPassword().equals(password)) {
+                        user = new User();
+                        user.setUserName(userName);
+                        user.setPassword(password);
+                        user.setUserCode(u.getUserCode());
+                        user.setUserRole(u.getUserRole());
+                    }
                 }
             });
 

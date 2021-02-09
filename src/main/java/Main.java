@@ -7,8 +7,10 @@
 import Admin.Admin;
 import Admin.AdminController;
 import Common.ConsoleColors;
+import Common.Patient;
 import Common.UserRole;
 import Consult.ConsultManager;
+import Consult.Specialization;
 import Doctor.Doctor;
 import Doctor.DoctorController;
 import User.User;
@@ -18,6 +20,7 @@ import Utilities.UserDataIO;
 import Utilities.Validate;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -48,13 +51,15 @@ public class Main {
         users.add(new Admin("admin01", "admin01", "admin01", UserRole.ADMIN));
         users.add(new Admin("admin02", "admin02", "admin02", UserRole.ADMIN));
         users.add(new Admin("admin03", "admin03", "admin03", UserRole.ADMIN));
-        users.add(new Doctor("doctor01", "doctor01", "doctor01", UserRole.AUTHORIZED_DOCTOR));
-        users.add(new Doctor("doctor02", "doctor02", "doctor02", UserRole.AUTHORIZED_DOCTOR));
-        users.add(new Doctor("doctor03", "doctor03", "doctor03", UserRole.AUTHORIZED_DOCTOR));
-        users.add(new Doctor("doctor04", "doctor04", "doctor04", UserRole.AUTHORIZED_DOCTOR));
-        users.add(new Doctor("doctor05", "doctor05", "doctor05", UserRole.AUTHORIZED_DOCTOR));
-        users.add(new Doctor("doctor06", "doctor06", "doctor06", UserRole.AUTHORIZED_DOCTOR));
-        users.add(new Doctor("doctor07", "doctor07", "doctor07", UserRole.AUTHORIZED_DOCTOR));
+        users.add(new Doctor(1, "doctor01", Specialization.TIM_MACH, new Date(), new ArrayList<>(), "doctor01", "doctor01", "doctor01", UserRole.AUTHORIZED_DOCTOR));
+        users.add(new Doctor(2, "doctor02", Specialization.DA_LIEU, new Date(), new ArrayList<>(), "doctor02", "doctor02", "doctor02", UserRole.AUTHORIZED_DOCTOR));
+        users.add(new Doctor(3, "doctor03", Specialization.NHA_KHOA, new Date(), new ArrayList<>(), "doctor03", "doctor03", "doctor03", UserRole.AUTHORIZED_DOCTOR));
+        users.add(new Doctor(4, "doctor04", Specialization.UNG_BUOU, new Date(), new ArrayList<>(), "doctor04", "doctor04", "doctor04", UserRole.AUTHORIZED_DOCTOR));
+        users.add(new Doctor(5, "doctor05",Specialization.TIM_MACH, new Date(), new ArrayList<>(), UserRole.DOCTOR));
+        users.add(new Doctor(6, "doctor06",Specialization.TIM_MACH, new Date(), new ArrayList<>(), UserRole.DOCTOR));
+        users.add(new Doctor(7, "doctor07",Specialization.NHA_KHOA, new Date(), new ArrayList<>(), UserRole.DOCTOR));
+        users.add(new Doctor(8, "doctor08",Specialization.TIM_MACH, new Date(), new ArrayList<>(), UserRole.DOCTOR));
+        
 
         new UserDataIO().writeData(users);
         //------------------ADD TAM DATA VAO FILE USERS.DAT DE TEST, XOA SAU
@@ -147,7 +152,7 @@ public class Main {
                         adminController.processing();
                         break;
                     case 3:
-
+                        adminController.queryDoctorInfo();
                         break;
                     case 4:
                         UserView u = new UserView();
@@ -189,7 +194,7 @@ public class Main {
                         doctorController.processing(userController.getLoggedInUser());
                         break;
                     case 2:
-                        functionBlock5();
+                        adminController.queryDoctorInfo();
                         break;
                     case 3:
                         userController.changePassword();
