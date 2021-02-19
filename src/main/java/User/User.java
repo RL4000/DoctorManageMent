@@ -76,4 +76,7 @@ public class User implements Serializable {
         return "userCode=" + userCode + ", userName=" + userName + ", password=" + password + ", userRole=" + userRole;
     }
     
+    public String showUserInfo(){
+        return "userCode=" + userCode + ", userName=" + userName + ", password=" + password + ", userRole=" + userRole;
+    }
 }

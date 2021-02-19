@@ -39,7 +39,7 @@ public class UserView {
 
         return userView;
     }
-    
+
     public Specialization selectSpecialization() {
         int count = 0;
         for (Specialization currentSpecialization : Specialization.values()) {
@@ -62,9 +62,11 @@ public class UserView {
     public void deleteUser(String userCode) {
         users = userDataIO.readData();
         for (User u : users) {
-            if (u.getUserCode().equals(userCode)) {
-                users.remove(u);
-                break;
+            if (u.getUserCode() != null) {
+                if (u.getUserCode().equals(userCode)) {
+                    users.remove(u);
+                    break;
+                }
             }
         }
         userDataIO.writeData(users);
@@ -73,9 +75,11 @@ public class UserView {
     public void updateUser(User userUpdate) {
         users = userDataIO.readData();
         users.forEach((u) -> {
-            if (u.getUserCode().equalsIgnoreCase(userUpdate.getUserCode())) {
-                u.setUserName(userUpdate.getUserName());
-                u.setPassword(userUpdate.getPassword());
+            if (u.getUserCode() != null) {
+                if (u.getUserCode().equalsIgnoreCase(userUpdate.getUserCode())) {
+                    u.setUserName(userUpdate.getUserName());
+                    u.setPassword(userUpdate.getPassword());
+                }
             }
         });
         userDataIO.writeData(users);
@@ -85,15 +89,36 @@ public class UserView {
         while (true) {
             String code = validate.getUsername("input new user code: ");
             for (User u : users) {
-                if (u.getUserCode().equalsIgnoreCase(code)) {
-                    code = null;
-                    break;
+                if (u.getUserCode() != null) {//chi check nhung user co usercode
+                    if (u.getUserCode().equalsIgnoreCase(code)) {
+                        code = null;
+                        break;
+                    }
                 }
             }
             if (code == null) {
                 System.out.println("this code already exist pls input another one");
             } else {
                 return code;
+            }
+        }
+    }
+
+    public String inputUserName() throws IOException {
+        while (true) {
+            String userName = validate.getUsername("Type in the new UserName: ");
+            for (User u : users) {
+                if (u.getUserName() != null) {
+                    if (u.getUserName().equals(userName)) {
+                        userName = null;
+                        break;
+                    }
+                }
+            }
+            if (userName == null) {
+                System.out.println("this userName already exist pls input a different one");
+            } else {
+                return userName;
             }
         }
     }
@@ -115,7 +140,6 @@ public class UserView {
     public void inputNewUser() {
         users = getUsers();
         String askPass = "Type in your Password: ";
-        String askUserName = "Type in your UserName: ";
         String askDoctorSpecialization = "Enter doctor Specialization: ";
         String askDoctorAvailability = "Enter availability: ";
         int choice;
@@ -127,37 +151,41 @@ public class UserView {
                 return;
             }
             String UserCode = inputUserCode();
-            String UserName = validate.getUsername(askUserName);
+            String UserName = inputUserName();
             String password;
             switch (choice) {
-                case 1:
+                case 1://admin
                     password = validate.getPassword(askPass);
                     Admin newAdmin = new Admin(UserCode, UserName, password, UserRole.ADMIN);
                     addUser(newAdmin);
                     break;
 
-                case 2:
+                case 2://authDoctor
+                    String authDocName = validate.getUsername("Enter the doctor name: ");
                     password = validate.getPassword(askPass);
                     int AuthDocID = getDoctorHighestID();
                     Doctor newAuthDoctor = new Doctor(UserCode, UserName, password, UserRole.AUTHORIZED_DOCTOR);
                     newAuthDoctor.setDoctorId(AuthDocID);
+                    newAuthDoctor.setName(authDocName);
                     System.out.print(askDoctorSpecialization);
                     newAuthDoctor.setSpecialization(selectSpecialization());
                     newAuthDoctor.setAvailability(validate.getDate_LimitToCurrent(askDoctorAvailability));
                     addUser(newAuthDoctor);
                     break;
 
-                case 3:
+                case 3://doctor
+                    String docName = validate.getUsername("Enter the doctor name: ");
                     int docID = getDoctorHighestID();
                     Doctor newDoctor = new Doctor(UserCode, UserName, null, UserRole.DOCTOR);
                     newDoctor.setDoctorId(docID);
+                    newDoctor.setName(docName);
                     System.out.print(askDoctorSpecialization);
                     newDoctor.setSpecialization(selectSpecialization());
                     newDoctor.setAvailability(validate.getDate_LimitToCurrent(askDoctorAvailability));
                     addUser(newDoctor);
                     break;
 
-                case 4:
+                case 4://normal user
                     password = validate.getPassword("Type in your Password: ");
                     User u = new User(UserName, password, UserRole.USER);
                     addUser(u);
@@ -175,7 +203,7 @@ public class UserView {
     }
 
     public User askUpdate(User updateMe) throws IOException {
-        updateMe.setUserName(validate.getUsername("Type in this account new UserName: "));
+        updateMe.setUserName(inputUserName());
         while (true) {
             String pass = validate.getPassword("Type in this account new password: ");
             if (pass.equals(validate.getPassword("Confirm account new password: "))) {
@@ -195,10 +223,12 @@ public class UserView {
             String code = validate.getUsername("Enter userCode needed to be deleted: ");
             users = userDataIO.readData();
             for (User find : users) {
-                if (find.getUserCode().equals(code)) {
-                    find = askUpdate(find);
-                    updateUser(find);
-                    return;
+                if (find.getUserCode() != null) {
+                    if (find.getUserCode().equals(code)) {
+                        find = askUpdate(find);
+                        updateUser(find);
+                        return;
+                    }
                 }
             }
             System.out.println("Can't find the userCode: " + code);
@@ -225,7 +255,14 @@ public class UserView {
                     users = getUsers();
                     System.out.println("List of all User");
                     for (User u : users) {
-                        System.out.println(u.toString());
+                        if (u instanceof Doctor) {
+                            System.out.print("DoctorID: " + ((Doctor) u).getDoctorId() + "; ");
+                        } else if (u instanceof Admin) {
+                            System.out.print("Admin user: ");
+                        } else {
+                            System.out.print("Normal user: ");
+                        }
+                        System.out.println(u.showUserInfo());
                     }
                     System.out.println();
                     break;

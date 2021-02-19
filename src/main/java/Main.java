@@ -13,6 +13,7 @@ import Consult.ConsultManager;
 import Consult.Specialization;
 import Doctor.Doctor;
 import Doctor.DoctorController;
+import Doctor.DoctorView;
 import User.User;
 import User.UserController;
 import User.UserView;
@@ -147,6 +148,8 @@ public class Main {
                 choice = validate.getINT_LIMIT("Your choice: ", 1, 7);
                 switch (choice) {
                     case 1:
+                        DoctorView d = new DoctorView();
+                        d.doFunction1();
                         break;
                     case 2:
                         adminController.processing();
