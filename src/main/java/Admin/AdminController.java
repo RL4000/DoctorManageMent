@@ -8,11 +8,11 @@ package Admin;
 import Common.ConsoleColors;
 import Common.Patient;
 import Common.UserRole;
-import Utilities.Validate;
+import utilities.Validate;
 import java.io.IOException;
 import Doctor.Doctor;
 import User.User;
-import Utilities.UserDataIO;
+import utilities.UserDataIO;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -40,6 +40,12 @@ public class AdminController {
         initMemoryData();
         dateFormat = new SimpleDateFormat("dd/MMM/yyyy");
     }
+
+    public ArrayList<User> getListUsers() {
+        return listUsers;
+    }
+    
+    
 
     public void processing() throws IOException {
         //--------Đọc data, xóa sau
