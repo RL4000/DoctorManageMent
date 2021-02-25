@@ -123,17 +123,17 @@ public class UserView {
         }
     }
 
-    public int getNewDoctorHighestID() {
+    public int getDoctorHighestID() {
         int id = 0;
         for (User u : users) {
             if (u.getUserRole().equals(UserRole.DOCTOR) || u.getUserRole().equals(UserRole.AUTHORIZED_DOCTOR)) {
                 int checkID = ((Doctor) u).getDoctorId();
-                if (checkID >= id) {
-                    id = checkID;
+                if (checkID > id) {
+                    id = checkID + 1;
                 }
             }
         }
-        return id+1;
+        return id;
     }
 
     // function4.2
@@ -163,7 +163,7 @@ public class UserView {
                 case 2://authDoctor
                     String authDocName = validate.getUsername("Enter the doctor name: ");
                     password = validate.getPassword(askPass);
-                    int AuthDocID = getNewDoctorHighestID();
+                    int AuthDocID = getDoctorHighestID();
                     Doctor newAuthDoctor = new Doctor(UserCode, UserName, password, UserRole.AUTHORIZED_DOCTOR);
                     newAuthDoctor.setDoctorId(AuthDocID);
                     newAuthDoctor.setName(authDocName);
@@ -175,7 +175,7 @@ public class UserView {
 
                 case 3://doctor
                     String docName = validate.getUsername("Enter the doctor name: ");
-                    int docID = getNewDoctorHighestID();
+                    int docID = getDoctorHighestID();
                     Doctor newDoctor = new Doctor(UserCode, UserName, null, UserRole.DOCTOR);
                     newDoctor.setDoctorId(docID);
                     newDoctor.setName(docName);
