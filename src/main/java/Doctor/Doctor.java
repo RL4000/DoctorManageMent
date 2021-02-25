@@ -8,6 +8,7 @@ package Doctor;
 import Common.ConsoleColors;
 import Common.Patient;
 import Common.UserRole;
+import Consult.Specialization;
 import User.User;
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -7,10 +7,10 @@ package User;
 
 import Admin.Admin;
 import Common.UserRole;
-import Doctor.Specialization;
+import Consult.Specialization;
 import Doctor.Doctor;
-import utilities.UserDataIO;
-import utilities.Validate;
+import Utilities.UserDataIO;
+import Utilities.Validate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -46,7 +46,7 @@ public class UserView {
             count++;
             System.out.println(count + ". " + currentSpecialization.name());
         }
-        return Specialization.values()[utilities.Validate.getINT_LIMIT("Select specialization: ", 1, count) - 1];
+        return Specialization.values()[boundary.Validate.getINT_LIMIT("Select specialization: ", 1, count) - 1];
     }
 
     public ArrayList<User> getUsers() {
@@ -123,17 +123,17 @@ public class UserView {
         }
     }
 
-    public int getDoctorHighestID() {
+    public int getNewDoctorHighestID() {
         int id = 0;
         for (User u : users) {
             if (u.getUserRole().equals(UserRole.DOCTOR) || u.getUserRole().equals(UserRole.AUTHORIZED_DOCTOR)) {
                 int checkID = ((Doctor) u).getDoctorId();
-                if (checkID > id) {
-                    id = checkID + 1;
+                if (checkID >= id) {
+                    id = checkID;
                 }
             }
         }
-        return id;
+        return id+1;
     }
 
     // function4.2
@@ -163,7 +163,7 @@ public class UserView {
                 case 2://authDoctor
                     String authDocName = validate.getUsername("Enter the doctor name: ");
                     password = validate.getPassword(askPass);
-                    int AuthDocID = getDoctorHighestID();
+                    int AuthDocID = getNewDoctorHighestID();
                     Doctor newAuthDoctor = new Doctor(UserCode, UserName, password, UserRole.AUTHORIZED_DOCTOR);
                     newAuthDoctor.setDoctorId(AuthDocID);
                     newAuthDoctor.setName(authDocName);
@@ -175,7 +175,7 @@ public class UserView {
 
                 case 3://doctor
                     String docName = validate.getUsername("Enter the doctor name: ");
-                    int docID = getDoctorHighestID();
+                    int docID = getNewDoctorHighestID();
                     Doctor newDoctor = new Doctor(UserCode, UserName, null, UserRole.DOCTOR);
                     newDoctor.setDoctorId(docID);
                     newDoctor.setName(docName);
