@@ -9,8 +9,8 @@ import Admin.Admin;
 import Common.UserRole;
 import Doctor.Specialization;
 import Doctor.Doctor;
-import Utilities.UserDataIO;
-import Utilities.Validate;
+import utilities.UserDataIO;
+import utilities.Validate;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -46,7 +46,7 @@ public class UserView {
             count++;
             System.out.println(count + ". " + currentSpecialization.name());
         }
-        return Specialization.values()[boundary.Validate.getINT_LIMIT("Select specialization: ", 1, count) - 1];
+        return Specialization.values()[utilities.Validate.getINT_LIMIT("Select specialization: ", 1, count) - 1];
     }
 
     public ArrayList<User> getUsers() {
