@@ -75,6 +75,8 @@ public class DoctorController {
                     System.out.println(ConsoleColors.RED + "You don't have any patients yet!!!");
                 }
                 break;
+            default:
+                break;
         }
 
     }

@@ -21,6 +21,10 @@ public class User implements Serializable {
 
     public User() {
     }
+    
+    public User(UserRole role){
+        this.userRole = role;
+    }
 
     public User(String userName, String password, UserRole userRole) {
         this.userName = userName;
@@ -72,4 +76,7 @@ public class User implements Serializable {
         return "userCode=" + userCode + ", userName=" + userName + ", password=" + password + ", userRole=" + userRole;
     }
     
+    public String showUserInfo(){
+        return "userCode=" + userCode + ", userName=" + userName + ", password=" + password + ", userRole=" + userRole;
+    }
 }
